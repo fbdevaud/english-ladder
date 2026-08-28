@@ -1,5 +1,10 @@
 # Archivo generado por build-bundle.js: se reconstruye con `node build-bundle.js`
 tense-sprint.bundle.html
+english-ladder.bundle.html
+
+# Snapshots de progreso: contienen tus estadisticas y errores literales.
+# El repo es publico; esto no. Se guardan localmente y no se suben.
+progreso/*.json
 
 # Ruido de OneDrive / Windows
 Thumbs.db

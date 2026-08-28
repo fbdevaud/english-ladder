@@ -7,8 +7,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Tense Sprint">
-<title>Tense Sprint - A2 &amp; B1</title>
+<meta name="apple-mobile-web-app-title" content="English Ladder">
+<title>English Ladder</title>
 <style>
 :root{--navy:#12213a;--blue:#2563eb;--pale:#eef5ff;--ink:#182033;--muted:#667085;--green:#087f5b;--red:#c92a2a;--amber:#c77d00;--line:#d9e2ef}
 *{box-sizing:border-box}
@@ -83,8 +83,8 @@ textarea{min-height:170px;resize:vertical}
 <body>
 <main class="app">
   <div class="top">
-    <div class="brand" onclick="home()">Tense <span>Sprint</span></div>
-    <div class="pill" id="topInfo">A2 &amp; B1</div>
+    <div class="brand" onclick="home()">English <span>Ladder</span></div>
+    <div class="pill" id="topInfo">Loading...</div>
   </div>
   <div class="progress"><i id="bar"></i></div>
   <section id="screen"></section>
@@ -100,7 +100,7 @@ textarea{min-height:170px;resize:vertical}
    ============================================================ */
 const BANK = window.BANK || [];
 const SYLLABUS = window.SYLLABUS || {A2:[],B1:[]};
-const KEY = 'tenseSprint_v6';
+const KEY = 'englishLadder_v1';
 const DAY = 86400000;
 /* Leitner: intervalo hasta la proxima vez, por caja */
 const BOX_MS = [0, 10*60000, 1*DAY, 3*DAY, 7*DAY, 21*DAY];
@@ -663,7 +663,7 @@ function historyHtml(L){
 }
 function downloadBackup(){
   try{
-    const name = 'tense-sprint-' + state.level + '-' + today() + '.json';
+    const name = 'english-ladder-' + state.level + '-' + today() + '.json';
     const blob = new Blob([JSON.stringify(state, null, 1)], {type:'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');

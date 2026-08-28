@@ -1,5 +1,5 @@
 /* ============================================================
-   Genera tense-sprint.bundle.html: la app entera en UN archivo,
+   Genera english-ladder.bundle.html: la app entera en UN archivo,
    con los content-*.js incrustados.
 
    Ejecutar:  node build-bundle.js
@@ -30,7 +30,7 @@ if(missing.length){
   process.exit(1);
 }
 
-const out = path.join(DIR,'tense-sprint.bundle.html');
+const out = path.join(DIR,'english-ladder.bundle.html');
 fs.writeFileSync(out, html);
-console.log('OK  ->  tense-sprint.bundle.html  (' + Math.round(html.length/1024) + ' KB)');
+console.log('OK  ->  english-ladder.bundle.html  (' + Math.round(html.length/1024) + ' KB)');
 console.log('Recuerda: el progreso se guarda por origen. Exporta desde Progress & report antes de cambiar de sitio.');

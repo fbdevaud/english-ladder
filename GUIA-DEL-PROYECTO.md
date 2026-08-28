@@ -1,4 +1,4 @@
-# Tense Sprint — guía del proyecto
+# English Ladder — guía del proyecto
 
 Objetivo doble: **mantener A1→A2 consolidado** y **avanzar A2→B1**.
 Contexto: aprendizaje presencial en Irlanda, con guías y tests de la escuela.
@@ -16,10 +16,10 @@ Prioridades acordadas: **gramática B1** y **vocabulario / phrasal verbs**.
 | `content-b1-vocab.js` | Banco B1 phrasal verbs, collocations, word formation, falsos amigos (38 ítems) | Sí |
 | `content-clase.js` | **Ejercicios sacados de tus guías y tests reales.** Empieza vacío. | Cada semana |
 | `validar.js` | Comprueba que el contenido nuevo no rompe nada (`node validar.js`) | Nunca |
-| `build-bundle.js` | Genera `tense-sprint.bundle.html`, la app en un solo archivo | Nunca |
+| `build-bundle.js` | Genera `english-ladder.bundle.html`, la app en un solo archivo | Nunca |
 | `PROMPT-NUEVO-CHAT.md` | El prompt listo para pegar al mandar fotos de un test | Nunca |
 | `.claude/commands/clase.md` | El comando `/clase` de Claude Code | Nunca |
-| `tense-sprint_v5.html` | La app original. Se conserva como respaldo. | Nunca |
+| `tense-sprint_v5.html` | La primera versión (A1→A2). Se conserva como respaldo. | Nunca |
 
 Abrir la app: doble clic en **`index.html`**. Los cuatro archivos de contenido deben estar en la misma carpeta.
 
@@ -120,7 +120,7 @@ Te devolverá un bloque de código que pegas tú en `content-clase.js`.
 
 Versión corta para pegar junto con tu reporte:
 
-> Trabajo con mi app Tense Sprint en `C:\Users\pipe_\OneDrive\Documentos\IA\English`.
+> Trabajo con mi app English Ladder en `C:\Users\pipe_\OneDrive\Documentos\IA\English`.
 > Lee primero `GUIA-DEL-PROYECTO.md`. Objetivo: A2 → B1, manteniendo A2.
 > Aquí va mi reporte actual desde la app:
 >
@@ -149,21 +149,20 @@ propio material de estudio.
 ```bash
 git init
 git add .
-git commit -m "Tense Sprint A2/B1"
+git commit -m "English Ladder"
 git branch -M main
-git remote add origin https://github.com/USUARIO/tense-sprint.git
+git remote add origin https://github.com/USUARIO/english-ladder.git
 git push -u origin main
 ```
 
 Luego en GitHub: **Settings → Pages → Source: Deploy from a branch → `main` / `/ (root)` → Save**.
-La URL queda en `https://USUARIO.github.io/tense-sprint/`. Tarda un minuto la primera vez.
-En el plan gratuito, Pages exige que el repositorio sea **público** (aquí no hay nada
-sensible: son ejercicios de inglés).
+La URL queda en `https://USUARIO.github.io/english-ladder/`. Tarda un minuto la primera vez.
+En el plan gratuito, Pages exige que el repositorio sea **público**.
 
 **Alternativa sin git:** arrastrar la carpeta a `app.netlify.com/drop` da una URL al
 instante, pero cada actualización es un arrastre manual.
 
-**Archivo único:** `node build-bundle.js` genera `tense-sprint.bundle.html` con todo
+**Archivo único:** `node build-bundle.js` genera `english-ladder.bundle.html` con todo
 incrustado, para enviártelo por correo o publicarlo donde sólo se admita un archivo.
 
 ### ⚠️ El progreso NO viaja contigo
@@ -182,6 +181,24 @@ sistema pierde su sentido. Elige uno.
 
 En el móvil, abre la URL y usa *Añadir a pantalla de inicio*: se abre a pantalla completa,
 como una app. El progreso vive en ese navegador, así que expórtalo de vez en cuando.
+
+### El código es público. Tu progreso, no.
+
+Son dos cosas distintas y conviene tenerlo claro:
+
+- **Si le pasas la URL a alguien**, su navegador abre la app con `localStorage` vacío.
+  No ve nada de lo tuyo: `localStorage` está aislado por navegador y por origen, nunca
+  viaja por la red. Puede usar la app para su propio estudio sin pisar tu historial.
+  Esto es justo lo que la hace compartible.
+- **El repositorio en sí es lo que es público.** El código y los bancos de ejercicios no
+  tienen nada tuyo dentro — pueden estarlo sin problema. Lo que sí sería tuyo son los
+  snapshots de `progreso/` (tu solidez por tema y tus errores literales): si se
+  commitean, cualquiera que navegue el repo en GitHub los vería.
+
+Por eso `progreso/*.json` está en `.gitignore`: tus snapshots se generan y se guardan en
+esa carpeta, pero **no se suben**. Si alguna vez quieres respaldo con historial en la
+nube sin exponerlo, la vía es un repositorio *privado* aparte sólo para `progreso/`
+(Pages no funciona ahí, pero no lo necesitas: es sólo almacenamiento).
 
 ---
 
