@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#12213a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tense Sprint">
+<title>Tense Sprint - A2 &amp; B1</title>
+<style>
+:root{--navy:#12213a;--blue:#2563eb;--pale:#eef5ff;--ink:#182033;--muted:#667085;--green:#087f5b;--red:#c92a2a;--amber:#c77d00;--line:#d9e2ef}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(155deg,#edf5ff,#f7f9fc 55%,#e9f7f2);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh}
+.app{max-width:640px;margin:auto;padding:18px 16px 40px}
+.top{display:flex;justify-content:space-between;align-items:center;margin:4px 0 14px}
+.brand{font-weight:850;font-size:1.18rem;color:var(--navy);cursor:pointer}
+.brand span{color:var(--blue)}
+.pill{font-size:.78rem;padding:7px 10px;background:#fff;border:1px solid var(--line);border-radius:99px;color:var(--muted)}
+.progress{height:8px;background:#dce6f3;border-radius:20px;overflow:hidden;margin-bottom:18px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2563eb,#38bdf8);transition:.35s}
+.card{background:#fff;border:1px solid #e5ebf3;border-radius:22px;padding:24px;box-shadow:0 12px 32px #1c315010}
+.tag{font-size:.78rem;color:var(--blue);font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.situation{font-size:1.05rem;line-height:1.5;margin:14px 0 9px;color:var(--muted)}
+.hint{display:inline-block;color:#725500;background:#fff6d8;border-radius:9px;padding:6px 10px;font-size:.85rem}
+.task{font-weight:750;font-size:1.1rem;line-height:1.45;margin:16px 0 12px}
+input,textarea{width:100%;border:2px solid #cdd9e8;border-radius:13px;font:inherit;padding:14px;outline:none;transition:.2s;background:#fff}
+input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px #2563eb1a}
+textarea{min-height:170px;resize:vertical}
+.actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.btn{border:0;border-radius:13px;padding:13px 16px;font:inherit;font-weight:800;cursor:pointer;min-height:48px}
+.primary{background:var(--blue);color:#fff;flex:1}
+.secondary{background:#eef3fa;color:#3d4b62}
+.opts{display:grid;gap:9px;margin-top:6px}
+.opt{border:2px solid #cdd9e8;background:#fff;border-radius:13px;padding:14px;font:inherit;font-weight:700;text-align:left;cursor:pointer;min-height:52px}
+.opt:hover{border-color:var(--blue)}
+.opt.pick{border-color:var(--blue);background:#f2f7ff}
+.opt.ok{border-color:#3aa981;background:#e9f8f0}
+.opt.no{border-color:#e08e8e;background:#fff0f0}
+.feedback{margin-top:16px;padding:15px;border-radius:13px;line-height:1.5}
+.correct{background:#e9f8f0;color:#075e43}
+.almost{background:#fff7e6;color:#7a5200}
+.wrong{background:#fff0f0;color:#8e2020}
+.feedback b.head{display:block;margin-bottom:6px;font-size:1rem}
+.feedback .sol{background:#ffffff90;border-radius:9px;padding:9px 11px;margin:8px 0;font-weight:700}
+.feedback .esn{display:block;margin-top:9px;font-size:.88rem;opacity:.85;border-top:1px dashed #00000020;padding-top:8px}
+.diff{background:#ffe3e3;border-radius:4px;padding:0 3px}
+.hide{display:none}
+.menu{display:grid;gap:10px}
+.hero{margin:4px 0 18px}
+.hero h1{font-size:1.9rem;line-height:1.1;margin:8px 0}
+.hero p{color:var(--muted);line-height:1.45;margin:0}
+.mode{border:1px solid var(--line);border-radius:17px;padding:16px;background:#fff;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.mode strong{display:block;font-size:1rem;margin-bottom:3px}
+.mode small{color:var(--muted);line-height:1.35}
+.mode .badge{background:var(--blue);color:#fff;border-radius:99px;font-size:.75rem;font-weight:800;padding:4px 9px;white-space:nowrap}
+.mode .badge.grey{background:#e3eaf4;color:#5b6b83}
+.levels{display:flex;gap:8px;margin:0 0 16px}
+.lv{flex:1;border:1px solid var(--line);background:#fff;border-radius:13px;padding:11px 8px;font:inherit;font-weight:800;cursor:pointer;color:#5b6b83}
+.lv.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.lv small{display:block;font-weight:600;font-size:.72rem;opacity:.7;margin-top:2px}
+.stats{display:flex;gap:8px;margin:0 0 16px}
+.stat{flex:1;background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px 6px;text-align:center}
+.stat b{display:block;color:var(--blue);font-size:1.15rem}
+.stat small{color:var(--muted);font-size:.72rem}
+.words{font-size:.85rem;color:var(--muted);text-align:right;margin-top:5px}
+.checklist{background:var(--pale);padding:14px;border-radius:13px;line-height:1.6;font-size:.92rem}
+.tiny{font-size:.8rem;color:var(--muted);margin-top:16px;text-align:center;line-height:1.5}
+.timer{font-variant-numeric:tabular-nums;font-weight:800}
+.trow{margin:11px 0}
+.trow .tl{display:flex;justify-content:space-between;font-size:.88rem;margin-bottom:5px;gap:10px}
+.trow .tl b{font-weight:750}
+.trow .tl span{color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.tbar{height:7px;background:#e6ecf5;border-radius:20px;overflow:hidden}
+.tbar i{display:block;height:100%;border-radius:20px}
+.g{background:#2f9e6e}.y{background:#e0a419}.r{background:#d55b5b}.n{background:#c9d3e0}
+.report{width:100%;min-height:230px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;line-height:1.45}
+.sect{margin-top:22px}
+.sect h3{font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 10px}
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="top">
+    <div class="brand" onclick="home()">Tense <span>Sprint</span></div>
+    <div class="pill" id="topInfo">A2 &amp; B1</div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+  <section id="screen"></section>
+</main>
+
+<script src="content-a2.js"></script>
+<script src="content-b1-grammar.js"></script>
+<script src="content-b1-vocab.js"></script>
+<script src="content-clase.js"></script>
+<script>
+/* ============================================================
+   MOTOR - no contiene ejercicios. El contenido vive en content-*.js
+   ============================================================ */
+const BANK = window.BANK || [];
+const SYLLABUS = window.SYLLABUS || {A2:[],B1:[]};
+const KEY = 'tenseSprint_v6';
+const DAY = 86400000;
+/* Leitner: intervalo hasta la proxima vez, por caja */
+const BOX_MS = [0, 10*60000, 1*DAY, 3*DAY, 7*DAY, 21*DAY];
+const MASTERED_BOX = 4;
+
+/* ---------- estado ---------- */
+function blank(){return{v:6,level:'B1',items:{},topics:{},errors:[],totals:{asked:0,right:0},
+  streak:0,lastDay:null,days:[],writing:{},check:{}}}
+let state = load();
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){const s=JSON.parse(raw);return Object.assign(blank(),s)}
+  }catch(e){}
+  /* migracion desde la app v5 */
+  const s = blank();
+  try{
+    const old = JSON.parse(localStorage.getItem('tenseSprint_v5')||'null');
+    if(old){s.totals.asked = old.done||0; s.totals.right = old.correct||0; s.level='A2'}
+    const ow = localStorage.getItem('tenseWriting_v5');
+    if(ow) s.writing.A2 = ow;
+  }catch(e){}
+  return s;
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+const $ = id => document.getElementById(id);
+const today = () => new Date().toISOString().slice(0,10);
+function touchDay(){
+  const d = today();
+  if(state.lastDay === d) return;
+  const y = new Date(Date.now()-DAY).toISOString().slice(0,10);
+  state.streak = (state.lastDay === y) ? state.streak+1 : 1;
+  state.lastDay = d;
+  state.days = (state.days||[]).concat(d).slice(-120);
+  save();
+}
+
+/* ---------- normalizacion y correccion ---------- */
+const CONTR = [
+ ["ain't","am not"],["can't","cannot"],["won't","will not"],["shan't","shall not"],
+ ["don't","do not"],["doesn't","does not"],["didn't","did not"],
+ ["isn't","is not"],["aren't","are not"],["wasn't","was not"],["weren't","were not"],
+ ["haven't","have not"],["hasn't","has not"],["hadn't","had not"],
+ ["couldn't","could not"],["wouldn't","would not"],["shouldn't","should not"],
+ ["mustn't","must not"],["mightn't","might not"],["needn't","need not"],
+ ["i'm","i am"],["you're","you are"],["we're","we are"],["they're","they are"],
+ ["i've","i have"],["you've","you have"],["we've","we have"],["they've","they have"],
+ ["i'll","i will"],["you'll","you will"],["he'll","he will"],["she'll","she will"],
+ ["it'll","it will"],["we'll","we will"],["they'll","they will"],["that'll","that will"]
+];
+/* forma de superficie: sin tocar contracciones (para detectar erratas) */
+function normSurface(s){
+  return String(s||'').toLowerCase()
+    .replace(/[‘’ʼ`´]/g,"'")
+    .replace(/[“”]/g,'"')
+    .replace(/\s+/g,' ')
+    .trim()
+    .replace(/[.,!?;:]+$/g,'')
+    .trim();
+}
+/* forma canonica: contracciones no ambiguas expandidas (para comparar) */
+function normBase(s){
+  let t = normSurface(s);
+  CONTR.forEach(p=>{ t = t.replace(new RegExp('\\b'+p[0]+'\\b','g'), p[1]) });
+  return t.replace(/\s+/g,' ').trim();
+}
+/* 's y 'd son ambiguos: generamos las dos lecturas */
+function expandAmbig(s, out, depth){
+  out.add(s);
+  if(depth > 2) return;
+  const m = /(\w)'(s|d)\b/.exec(s);
+  if(!m) return;
+  const i = m.index + 1, head = s.slice(0,i), rest = s.slice(i+2);
+  const opts = m[2] === 's' ? [' is',' has'] : [' would',' had'];
+  opts.forEach(o => expandAmbig(head + o + rest, out, depth+1));
+}
+function variants(s){const out=new Set();expandAmbig(normBase(s),out,0);return out}
+function lev(a,b){
+  const m=a.length,n=b.length;if(!m)return n;if(!n)return m;
+  let prev=Array.from({length:n+1},(_,j)=>j), cur=new Array(n+1);
+  for(let i=1;i<=m;i++){cur[0]=i;
+    for(let j=1;j<=n;j++){cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1))}
+    [prev,cur]=[cur,prev]}
+  return prev[n];
+}
+/* Errata, no error de gramatica: mismo numero de palabras, una sola distinta,
+   ambas versiones de esa palabra largas, y a 1-2 pulsaciones de distancia.
+   Asi "doesnt" cuenta como errata pero "has/had" o "in/on" cuentan como error. */
+function isTypo(given, answer){
+  const g = normSurface(given), t = normSurface(answer);
+  if(t.length <= 8 || g === t) return false;
+  const gw = g.split(' '), tw = t.split(' ');
+  if(gw.length !== tw.length) return false;
+  const diff = [];
+  for(let k = 0; k < tw.length; k++) if(gw[k] !== tw[k]) diff.push(k);
+  if(diff.length !== 1) return false;
+  const a = gw[diff[0]], b = tw[diff[0]];
+  if(a.length < 4 || b.length < 4) return false;
+  return lev(a,b) <= 2;
+}
+/* devuelve 'right' | 'almost' | 'wrong' */
+function grade(item, given){
+  const mine = variants(given);
+  for(const acc of item.a){
+    for(const v of variants(acc)) if(mine.has(v)) return 'right';
+  }
+  /* en opcion multiple no hay erratas posibles: se elige de una lista */
+  if(item.type === 'choice') return 'wrong';
+  for(const acc of item.a) if(isTypo(given, acc)) return 'almost';
+  return 'wrong';
+}
+/* resalta la primera palabra que difiere */
+function diffHtml(given, answer){
+  const gw = normBase(given).split(' '), aw = normBase(answer).split(' ');
+  const out = [];
+  for(let i=0;i<gw.length;i++){
+    out.push(gw[i] !== aw[i] ? '<span class="diff">'+esc(gw[i])+'</span>' : esc(gw[i]));
+  }
+  return out.join(' ');
+}
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* ---------- SRS ---------- */
+function rec(id){
+  if(!state.items[id]) state.items[id] = {box:0,due:0,seen:0,right:0,wrong:0,last:0};
+  return state.items[id];
+}
+function schedule(id, verdict){
+  const r = rec(id), now = Date.now();
+  r.seen++; r.last = now;
+  if(verdict === 'wrong'){ r.wrong++; r.box = 1; r.due = now; }
+  else if(verdict === 'almost'){ r.right++; r.box = Math.max(1, r.box); r.due = now + BOX_MS[r.box]; }
+  else { r.right++; r.box = Math.min(5, r.box + 1); r.due = now + BOX_MS[r.box]; }
+}
+function bumpTopic(item, ok){
+  const k = item.level + '|' + item.topic;
+  const t = state.topics[k] || (state.topics[k] = {right:0,wrong:0});
+  ok ? t.right++ : t.wrong++;
+}
+const pool = (level,f) => BANK.filter(x => x.level===level && (!f||f(x)));
+function dueCount(level){
+  const now = Date.now();
+  return pool(level).filter(x => state.items[x.id] && state.items[x.id].due <= now).length;
+}
+function newCount(level){ return pool(level).filter(x => !state.items[x.id]).length }
+function masteredCount(level){
+  return pool(level).filter(x => state.items[x.id] && state.items[x.id].box >= MASTERED_BOX).length;
+}
+const shuffle = a => [...a].sort(() => Math.random()-.5);
+
+function buildSession(level, size, f){
+  const now = Date.now(), p = pool(level, f);
+  const st = x => state.items[x.id];
+  const due    = p.filter(x => st(x) && st(x).due <= now).sort((a,b)=>st(a).due-st(b).due);
+  const fresh  = p.filter(x => !st(x));
+  const future = p.filter(x => st(x) && st(x).due > now).sort((a,b)=>st(a).due-st(b).due);
+  const out = [];
+  const push = x => { if(out.length < size && !out.includes(x)) out.push(x) };
+  due.slice(0, Math.ceil(size*0.6)).forEach(push);
+  fresh.forEach(push);
+  due.forEach(push);
+  future.forEach(push);
+  return shuffle(out);
+}
+
+/* ---------- topics ---------- */
+function topicsOf(level){
+  const listed = SYLLABUS[level] || [];
+  const found = [...new Set(pool(level).map(x => x.topic))];
+  return listed.filter(t => found.includes(t)).concat(found.filter(t => !listed.includes(t)));
+}
+function topicScore(level, topic){
+  const t = state.topics[level+'|'+topic];
+  if(!t || (t.right+t.wrong) === 0) return {n:0,pct:null};
+  const n = t.right + t.wrong;
+  return {n, pct: Math.round(t.right/n*100)};
+}
+/* ---------- trayectoria ---------- */
+/* Una foto por dia y nivel. Es lo unico que permite ver si progresas
+   o si llevas tres semanas dando vueltas sobre lo mismo. */
+function snapshot(){
+  const d = today(), lv = state.level;
+  const h = state.history || (state.history = []);
+  const e = {d, lv, ready: readiness(lv), mast: masteredCount(lv), tot: pool(lv).length,
+             asked: state.totals.asked, right: state.totals.right};
+  const last = h.length ? h[h.length-1] : null;
+  if(last && last.d === d && last.lv === lv) h[h.length-1] = e; else h.push(e);
+  if(h.length > 240) h.splice(0, h.length - 240);
+}
+function sparkline(vals, w, hh){
+  if(vals.length < 2) return '';
+  const x = k => (k/(vals.length-1)) * (w-4) + 2;
+  const y = v => hh - 3 - (Math.max(0,Math.min(100,v))/100) * (hh-6);
+  const line = vals.map((v,k) => (k?'L':'M') + x(k).toFixed(1) + ' ' + y(v).toFixed(1)).join(' ');
+  const area = line + ` L ${x(vals.length-1).toFixed(1)} ${hh} L ${x(0).toFixed(1)} ${hh} Z`;
+  return `<svg viewBox="0 0 ${w} ${hh}" preserveAspectRatio="none" style="width:100%;height:${hh}px;display:block">
+    <path d="${area}" fill="#2563eb18"/>
+    <path d="${line}" fill="none" stroke="#2563eb" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${x(vals.length-1).toFixed(1)}" cy="${y(vals[vals.length-1]).toFixed(1)}" r="3.5" fill="#2563eb"/>
+  </svg>`;
+}
+function historyOf(level){ return (state.history||[]).filter(e => e.lv === level) }
+
+function readiness(level){
+  const ts = topicsOf(level).map(t => topicScore(level,t));
+  const rated = ts.filter(s => s.n >= 3);
+  if(!ts.length) return 0;
+  const strong = rated.filter(s => s.pct >= 75).length;
+  return Math.round(strong / ts.length * 100);
+}
+
+/* ---------- estado de sesion ---------- */
+let q = [], i = 0, mode = 'practice', timer = null, picked = null, examLog = [];
+
+/* ============================================================
+   PANTALLAS
+   ============================================================ */
+function home(){
+  clearInterval(timer); timer = null;
+  $('bar').style.width = '0%';
+  const L = state.level;
+  $('topInfo').textContent = 'Level ' + L;
+  const total = pool(L).length, due = dueCount(L), fresh = newCount(L), mast = masteredCount(L);
+  const acc = state.totals.asked ? Math.round(state.totals.right/state.totals.asked*100) : 0;
+  const ready = readiness(L);
+  const lvBtn = (lv,label,sub) =>
+    `<button class="lv ${state.level===lv?'on':''}" onclick="setLevel('${lv}')">${label}<small>${sub}</small></button>`;
+  $('screen').innerHTML = `
+  <div class="levels">
+    ${lvBtn('A2','A2','consolidar')}
+    ${lvBtn('B1','B1','objetivo')}
+  </div>
+  <div class="stats">
+    <div class="stat"><b>${due}</b><small>due today</small></div>
+    <div class="stat"><b>${mast}/${total}</b><small>mastered</small></div>
+    <div class="stat"><b>${acc}%</b><small>accuracy</small></div>
+    <div class="stat"><b>${state.streak}</b><small>day streak</small></div>
+  </div>
+  <div class="menu">
+    <button class="mode" onclick="start('practice')">
+      <span><strong>Daily practice</strong><small>Spaced repetition: due items first, then new ones.</small></span>
+      <span class="badge ${due?'':'grey'}">${due? due+' due' : fresh+' new'}</span></button>
+    <button class="mode" onclick="topicPicker()">
+      <span><strong>Drill one topic</strong><small>Attack a single weak point until it sticks.</small></span>
+      <span class="badge grey">${topicsOf(L).length}</span></button>
+    <button class="mode" onclick="start('check')">
+      <span><strong>Level check</strong><small>Orientative only. One question per topic, no feedback until the end.</small></span>
+      <span class="badge grey">${ready}%</span></button>
+    <button class="mode" onclick="start('exam')">
+      <span><strong>Exam mode &middot; 30 minutes</strong><small>Timed, no hints, no feedback. Simulates class conditions.</small></span>
+      <span class="badge grey">18 q</span></button>
+    <button class="mode" onclick="writing()">
+      <span><strong>Writing task</strong><small>${L==='B1'?'120 words: opinion, story or email.':'80 words with tense targets.'}</small></span>
+      <span class="badge grey">${L==='B1'?'120 w':'80 w'}</span></button>
+    <button class="mode" onclick="progress()">
+      <span><strong>Progress &amp; report</strong><small>Topic map, and the report you paste into a new chat.</small></span>
+      <span class="badge grey">&rarr;</span></button>
+  </div>
+  <div class="tiny">Progress is stored in this browser only. Export it from <b>Progress &amp; report</b> before clearing your browser data.</div>`;
+}
+function setLevel(lv){ state.level = lv; save(); home() }
+
+let topicList = [];
+function topicPicker(){
+  const L = state.level;
+  topicList = topicsOf(L);
+  const rows = topicList.map((t,k) => {
+    const s = topicScore(L,t);
+    const n = pool(L, x => x.topic===t).length;
+    const cls = s.pct===null ? 'n' : s.pct>=75 ? 'g' : s.pct>=50 ? 'y' : 'r';
+    return `<button class="mode" onclick="start('topic',${k})">
+      <span><strong>${t}</strong><small>${n} items &middot; ${s.pct===null?'not practised yet':s.pct+'% over '+s.n+' attempts'}</small></span>
+      <span class="badge ${cls==='g'?'':'grey'}">${s.pct===null?'new':s.pct+'%'}</span></button>`;
+  }).join('');
+  $('topInfo').textContent = 'Topics &middot; ' + L;
+  $('screen').innerHTML = `<div class="hero"><div class="tag">${L} syllabus</div><h1>Pick your battle.</h1>
+    <p>Red first. Ten questions per drill.</p></div><div class="menu">${rows}</div>
+    <div class="actions" style="margin-top:16px"><button class="btn secondary" onclick="home()">Back</button></div>`;
+}
+
+function start(m, arg){
+  mode = m; i = 0; picked = null; examLog = [];
+  const L = state.level;
+  touchDay();
+  if(m === 'topic'){
+    const t = topicList[arg];
+    q = buildSession(L, 10, x => x.topic === t);
+  }
+  else if(m === 'check') q = checkSet(L);
+  else if(m === 'exam')  q = buildSession(L, 18);
+  else                   q = buildSession(L, 20);
+  if(!q.length){ alert('No items available for this level yet.'); return home() }
+  if(m === 'exam'){
+    const end = Date.now() + 30*60000;
+    timer = setInterval(() => {
+      const left = Math.max(0, end - Date.now());
+      $('topInfo').innerHTML = '<span class="timer">' + String(Math.floor(left/60000)).padStart(2,'0') + ':' +
+        String(Math.floor(left/1000)%60).padStart(2,'0') + '</span>';
+      if(!left){ clearInterval(timer); finish() }
+    }, 500);
+  }
+  render();
+}
+/* level check: un item por topic, prefiriendo los no vistos */
+function checkSet(L){
+  const out = [];
+  topicsOf(L).forEach(t => {
+    const items = pool(L, x => x.topic === t);
+    const unseen = items.filter(x => !state.items[x.id]);
+    const pick = (unseen.length ? unseen : items)[Math.floor(Math.random() * (unseen.length||items.length))];
+    if(pick) out.push(pick);
+  });
+  return out;
+}
+
+function render(){
+  const x = q[i];
+  $('bar').style.width = (i/q.length*100) + '%';
+  if(mode !== 'exam') $('topInfo').textContent = `${i+1} / ${q.length}`;
+  const silent = (mode === 'exam' || mode === 'check');
+  const hint = (x.h && !silent) ? `<div class="hint">${x.h}</div>` : '';
+  const body = x.type === 'choice'
+    ? `<div class="opts">${x.options.map((o,k)=>`<button class="opt" id="o${k}" onclick="pick(${k})">${esc(o)}</button>`).join('')}</div>`
+    : `<input id="answer" autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="sentences" placeholder="${x.type==='gap'?'Only the missing word(s)':'Type the full sentence in English'}"/>`;
+  $('screen').innerHTML = `<div class="card">
+    <div class="tag">${x.topic}${x.src?' &middot; '+esc(x.src):''}</div>
+    <div class="situation">${x.s}</div>${hint}
+    <div class="task">${x.t}</div>
+    ${body}
+    <div class="actions">
+      <button class="btn secondary" onclick="skip()">Skip</button>
+      <button class="btn primary" id="go" onclick="check()">${silent?'Next':'Check answer'}</button>
+    </div>
+    <div id="feedback" class="feedback hide"></div></div>
+    <div class="tiny">${x.type==='gap'?'Write only what goes in the gap.':x.type==='choice'?'Tap the option, then confirm.':'Full sentence. Punctuation is not graded.'}</div>`;
+  const inp = $('answer');
+  if(inp){ inp.addEventListener('keydown', e => { if(e.key === 'Enter') check() }); inp.focus() }
+}
+function pick(k){
+  picked = k;
+  document.querySelectorAll('.opt').forEach((el,n) => el.classList.toggle('pick', n === k));
+}
+
+function check(){
+  const x = q[i];
+  const given = x.type === 'choice' ? (picked === null ? '' : x.options[picked]) : $('answer').value;
+  if(!given.trim()) return;
+  const verdict = grade(x, given);
+  const ok = verdict !== 'wrong';
+  state.totals.asked++; if(ok) state.totals.right++;
+  schedule(x.id, verdict);
+  bumpTopic(x, ok);
+  if(!ok){
+    state.errors.unshift({id:x.id, topic:x.topic, level:x.level, given:given.trim(), want:x.a[0], at:today()});
+    state.errors = state.errors.slice(0,40);
+  }
+  save();
+
+  if(mode === 'exam' || mode === 'check'){
+    examLog.push({item:x, given, verdict});
+    if(verdict === 'wrong' && mode === 'exam'){ /* sin repesca en examen */ }
+    i++;
+    return i < q.length ? render() : finish();
+  }
+
+  const f = $('feedback');
+  f.className = 'feedback ' + (verdict === 'right' ? 'correct' : verdict === 'almost' ? 'almost' : 'wrong');
+  let html;
+  if(verdict === 'right'){
+    html = `<b class="head">Correct.</b><div>${x.r}</div>`;
+  } else if(verdict === 'almost'){
+    html = `<b class="head">Almost - check the spelling.</b>
+      <div class="sol">${esc(x.a[0])}</div><div>${x.r}</div>`;
+  } else {
+    html = `<b class="head">Not quite.</b>
+      <div>You wrote: ${diffHtml(given, x.a[0])}</div>
+      <div class="sol">${esc(x.a[0])}</div><div>${x.r}</div>`;
+  }
+  if(x.es) html += `<span class="esn"><b>ES &rarr;</b> ${x.es}</span>`;
+  f.innerHTML = html;
+  f.classList.remove('hide');
+  if(x.type === 'choice'){
+    document.querySelectorAll('.opt').forEach((el,n) => {
+      el.disabled = true;
+      const isRight = x.a.some(a => normBase(a) === normBase(x.options[n]));
+      if(isRight) el.classList.add('ok');
+      else if(n === picked) el.classList.add('no');
+    });
+  } else { $('answer').disabled = true }
+  const go = $('go');
+  go.textContent = (i+1 < q.length) ? 'Next question' : 'See results';
+  go.onclick = next;
+  if(verdict === 'wrong') requeue();
+}
+/* un fallo vuelve a aparecer mas adelante en la misma sesion */
+function requeue(){
+  const x = q[i];
+  if(q.filter(y => y === x).length > 1) return;
+  q.splice(Math.min(i + 5, q.length), 0, x);
+}
+function next(){ picked = null; i++; i < q.length ? render() : finish() }
+function skip(){
+  if(q.length < 2) return;
+  const x = q.splice(i,1)[0];
+  q.splice(Math.min(i + 4, q.length), 0, x);
+  picked = null; render();
+}
+
+function finish(){
+  clearInterval(timer); timer = null;
+  $('bar').style.width = '100%';
+  $('topInfo').textContent = 'Session complete';
+  const L = state.level;
+  snapshot(); save();
+
+  if(mode === 'check'){
+    const by = {};
+    examLog.forEach(e => { (by[e.item.topic] = by[e.item.topic] || []).push(e.verdict !== 'wrong') });
+    const rows = Object.keys(by).map(t => {
+      const ok = by[t].filter(Boolean).length, n = by[t].length, pct = Math.round(ok/n*100);
+      const cls = pct >= 75 ? 'g' : pct >= 50 ? 'y' : 'r';
+      return `<div class="trow"><div class="tl"><b>${t}</b><span>${ok}/${n}</span></div>
+        <div class="tbar"><i class="${cls}" style="width:${pct}%"></i></div></div>`;
+    }).join('');
+    const ok = examLog.filter(e => e.verdict !== 'wrong').length;
+    $('screen').innerHTML = `<div class="card"><div class="tag">Level check &middot; ${L}</div>
+      <div class="hero"><h1>${ok} / ${examLog.length}</h1>
+      <p>Orientative snapshot, not a verdict. Green means the topic is probably solid; red is where the next sessions should go.</p></div>
+      ${rows}
+      <div class="actions"><button class="btn secondary" onclick="home()">Home</button>
+      <button class="btn primary" onclick="topicPicker()">Drill a red topic</button></div></div>`;
+    return;
+  }
+
+  const ok = examLog.length ? examLog.filter(e => e.verdict !== 'wrong').length : null;
+  const missed = state.errors.filter(e => e.at === today()).slice(0,6);
+  const missedHtml = missed.length
+    ? `<div class="checklist"><b>Today's misses</b><br>${missed.map(m =>
+        `&bull; <i>${esc(m.given)}</i> &rarr; <b>${esc(m.want)}</b>`).join('<br>')}</div>`
+    : `<div class="checklist"><b>No errors recorded today.</b><br>Come back tomorrow: the spacing is what makes it stick.</div>`;
+  $('screen').innerHTML = `<div class="card"><div class="tag">${mode === 'exam' ? 'Exam mode complete' : 'Session complete'}</div>
+    <div class="hero"><h1>${ok !== null ? ok + ' / ' + examLog.length : 'Well done.'}</h1>
+    <p>${masteredCount(L)} of ${pool(L).length} ${L} items are now in long-term review. ${dueCount(L)} due again today.</p></div>
+    ${missedHtml}
+    <div class="actions"><button class="btn secondary" onclick="home()">Home</button>
+    <button class="btn primary" onclick="start('practice')">Another round</button></div></div>`;
+}
+
+/* ---------- writing ---------- */
+function writing(){
+  clearInterval(timer);
+  const L = state.level, target = L === 'B1' ? 120 : 80;
+  $('topInfo').textContent = 'Writing &middot; ' + L;
+  $('bar').style.width = '15%';
+  const brief = L === 'B1'
+    ? {task:'Write about a decision you had to make since you arrived in Ireland. Explain the situation, what you decided, and what you would do differently.',
+       list:['Present perfect vs past simple: what has changed since you arrived',
+             'Past perfect: what had happened before the decision',
+             'Second conditional: what you would do differently',
+             'Passive or reported speech: at least one sentence',
+             'Two connectors: although / however / despite / so that',
+             'Two phrasal verbs used naturally']}
+    : {task:'Write about a busy day: your routine, something happening now, a past event with an interruption, an experience and a future plan.',
+       list:['Present simple: routine','Present continuous: now',
+             'Past simple + past continuous: the story','Present perfect: experience',
+             'Will or going to: the future plan']};
+  $('screen').innerHTML = `<div class="card"><div class="tag">${target}-word writing</div>
+    <div class="situation">${brief.task}</div>
+    <div class="checklist">Aim to include:<br>${brief.list.map(l => '&bull; ' + l).join('<br>')}</div>
+    <textarea id="wtext" placeholder="Write here..." oninput="countWords()"></textarea>
+    <div class="words" id="wc">0 / ${target} words</div>
+    <div class="actions"><button class="btn secondary" onclick="home()">Save &amp; exit</button>
+    <button class="btn primary" onclick="reviewWriting()">Self-review</button></div></div>
+    <div class="tiny">Saved automatically. Paste this text into a chat with Claude for a full correction.</div>`;
+  const old = state.writing[L];
+  if(old){ $('wtext').value = old; countWords() }
+}
+const wordCount = t => t.trim() ? t.trim().split(/\s+/).length : 0;
+function countWords(){
+  const L = state.level, target = L === 'B1' ? 120 : 80;
+  state.writing[L] = $('wtext').value; save();
+  $('wc').textContent = wordCount($('wtext').value) + ' / ' + target + ' words';
+}
+function reviewWriting(){
+  const L = state.level, target = L === 'B1' ? 120 : 80;
+  const n = wordCount(state.writing[L] || '');
+  $('bar').style.width = '100%';
+  const checks = L === 'B1'
+    ? ['Did you use present perfect for changes with no fixed date, and past simple when you named the moment?',
+       'Is there at least one <i>would</i> sentence with a past-simple <i>if</i> clause?',
+       'After <i>although</i>, is there a subject + verb? After <i>despite</i>, only a noun or -ing?',
+       'Did you avoid doubling the contrast (<i>although ... but</i>)?',
+       'Are your phrasal verbs in the right order (sort it out, not sort out it)?']
+    : ['Does every <i>he/she/it</i> present-simple verb have -s?',
+       'After <i>do / does / did / will</i>, did you use the base verb?',
+       'After <i>have / has</i>, did you use a past participle?',
+       'Does each sentence have a clear time expression?'];
+  $('screen').innerHTML = `<div class="card"><div class="tag">Self-review</div>
+    <div class="hero"><h1>${n} words</h1>
+    <p>${n >= target ? 'Target reached.' : 'Add ' + (target-n) + ' more words to reach ' + target + '.'}</p></div>
+    <div class="checklist"><b>Read it once for each line</b><br>${checks.map(c => '&bull; ' + c).join('<br>')}</div>
+    <div class="actions"><button class="btn secondary" onclick="writing()">Keep editing</button>
+    <button class="btn primary" onclick="home()">Finish</button></div></div>`;
+}
+
+/* ---------- progreso y reporte ---------- */
+function progress(){
+  clearInterval(timer);
+  const L = state.level;
+  $('topInfo').textContent = 'Progress &middot; ' + L;
+  $('bar').style.width = '100%';
+  const rows = topicsOf(L).map(t => {
+    const s = topicScore(L,t);
+    const cls = s.pct === null ? 'n' : s.pct >= 75 ? 'g' : s.pct >= 50 ? 'y' : 'r';
+    return `<div class="trow"><div class="tl"><b>${t}</b><span>${s.pct === null ? 'new' : s.pct + '% &middot; ' + s.n}</span></div>
+      <div class="tbar"><i class="${cls}" style="width:${s.pct === null ? 4 : s.pct}%"></i></div></div>`;
+  }).join('');
+  $('screen').innerHTML = `<div class="card">
+    <div class="tag">${L} topic map</div>
+    <div class="hero"><h1>${readiness(L)}% solid</h1>
+      <p>Share of ${L} topics answered at 75% or better over at least 3 attempts. Orientative.</p></div>
+    ${rows}
+    ${historyHtml(L)}
+    <div class="sect"><h3>Report for a new chat</h3>
+      <textarea class="report" id="rep" readonly>${esc(buildReport())}</textarea>
+      <div class="actions"><button class="btn secondary" onclick="copyReport()">Copy</button>
+      <button class="btn primary" onclick="home()">Home</button></div>
+      <div class="tiny">Paste this at the start of a new chat so Claude knows exactly where you are.</div></div>
+    <div class="sect"><h3>Backup</h3>
+      <div class="actions"><button class="btn primary" onclick="downloadBackup()">Download snapshot</button>
+      <button class="btn secondary" onclick="importData()">Import</button></div>
+      <div class="actions"><button class="btn secondary" onclick="exportData()">Copy as text</button>
+      <button class="btn secondary" onclick="resetData()">Reset</button></div>
+      <div class="tiny">Save the snapshot into the <b>progreso/</b> folder and commit it.
+      That is what turns this into a history you can actually look back on.</div></div>
+  </div>`;
+}
+function historyHtml(L){
+  const h = historyOf(L);
+  if(h.length < 2){
+    return `<div class="sect"><h3>Trajectory</h3>
+      <div class="checklist">Only ${h.length} session${h.length===1?'':'s'} recorded for ${L}.
+      The curve appears once there are two days of history. This is what shows whether you are
+      moving or circling.</div></div>`;
+  }
+  const first = h[0], last = h[h.length-1];
+  const d = last.ready - first.ready;
+  const days = Math.max(1, Math.round((new Date(last.d) - new Date(first.d)) / DAY));
+  const sign = d > 0 ? '+' : '';
+  const rows = h.slice(-8).reverse().map(e =>
+    `<div class="tl" style="padding:5px 0;border-bottom:1px solid #eef2f7">
+      <b style="font-weight:600">${e.d}</b>
+      <span>${e.ready}% solid &middot; ${e.mast}/${e.tot} mastered</span></div>`).join('');
+  return `<div class="sect"><h3>Trajectory &middot; ${L}</h3>
+    <div class="hero" style="margin:0 0 10px"><h1 style="font-size:1.5rem;margin:0">${sign}${d} points</h1>
+      <p>Solidity went from ${first.ready}% to ${last.ready}% across ${days} day${days===1?'':'s'}
+      and ${h.length} sessions.</p></div>
+    ${sparkline(h.map(e => e.ready), 300, 64)}
+    <div style="margin-top:10px">${rows}</div></div>`;
+}
+function downloadBackup(){
+  try{
+    const name = 'tense-sprint-' + state.level + '-' + today() + '.json';
+    const blob = new Blob([JSON.stringify(state, null, 1)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove() }, 1000);
+  }catch(e){ alert('Could not download. Use Export data and copy the text instead.') }
+}
+function buildReport(){
+  const L = state.level;
+  const line = [];
+  line.push('=== TENSE SPRINT / REPORTE ' + today() + ' ===');
+  line.push('Nivel activo: ' + L + ' | Racha: ' + state.streak + ' dias | Precision global: ' +
+    (state.totals.asked ? Math.round(state.totals.right/state.totals.asked*100) : 0) + '% (' + state.totals.asked + ' intentos)');
+  ['A2','B1'].forEach(lv => {
+    const items = pool(lv);
+    if(!items.length) return;
+    line.push('');
+    line.push('-- ' + lv + ' -- ' + items.length + ' items | ' + masteredCount(lv) + ' dominados | ' +
+      dueCount(lv) + ' due | ' + newCount(lv) + ' sin ver | solidez ' + readiness(lv) + '%');
+    const strong = [], mid = [], weak = [], fresh = [];
+    topicsOf(lv).forEach(t => {
+      const s = topicScore(lv,t);
+      const tag = t + (s.pct === null ? '' : ' ' + s.pct + '%(' + s.n + ')');
+      if(s.pct === null) fresh.push(t);
+      else if(s.pct >= 75) strong.push(tag);
+      else if(s.pct >= 50) mid.push(tag);
+      else weak.push(tag);
+    });
+    if(weak.length)   line.push('  DEBIL:      ' + weak.join(', '));
+    if(mid.length)    line.push('  EN CURSO:   ' + mid.join(', '));
+    if(strong.length) line.push('  SOLIDO:     ' + strong.join(', '));
+    if(fresh.length)  line.push('  SIN TOCAR:  ' + fresh.join(', '));
+  });
+  const h = historyOf(L);
+  if(h.length >= 2){
+    const f = h[0], l = h[h.length-1];
+    line.push('');
+    line.push('-- TRAYECTORIA ' + L + ' -- ' + h.length + ' sesiones, ' +
+      f.d + ' (' + f.ready + '%) -> ' + l.d + ' (' + l.ready + '%), ' +
+      (l.ready - f.ready >= 0 ? '+' : '') + (l.ready - f.ready) + ' puntos');
+    line.push('  ' + h.slice(-10).map(e => e.d.slice(5) + ':' + e.ready + '%').join('  '));
+  }
+  if(state.errors.length){
+    line.push('');
+    line.push('-- ULTIMOS ERRORES (mi respuesta -> correcta) --');
+    state.errors.slice(0,12).forEach(e =>
+      line.push('  [' + e.level + '/' + e.topic + '] "' + e.given + '" -> "' + e.want + '"'));
+  }
+  const w = state.writing[L];
+  if(w && w.trim()) line.push('', '-- WRITING GUARDADO (' + wordCount(w) + ' palabras) --', w.trim());
+  line.push('', 'Pideme: (1) que corrija los errores de arriba, (2) ejercicios nuevos para los topics DEBIL,');
+  line.push('(3) que los agregue a content-clase.js.');
+  return line.join('\n');
+}
+function copyReport(){
+  const t = $('rep');
+  t.removeAttribute('readonly'); t.select(); t.setSelectionRange(0, 999999);
+  let done = false;
+  try{ done = document.execCommand('copy') }catch(e){}
+  t.setAttribute('readonly','');
+  if(navigator.clipboard && !done){ navigator.clipboard.writeText(t.value).then(()=>alert('Report copied.')); return }
+  alert(done ? 'Report copied.' : 'Select the text and copy it manually.');
+}
+function exportData(){
+  const blob = JSON.stringify(state);
+  $('screen').innerHTML = `<div class="card"><div class="tag">Backup</div>
+    <div class="hero"><h1>Copy and keep this.</h1><p>Paste it back with Import to restore your progress on another browser or after clearing data.</p></div>
+    <textarea class="report" id="rep">${esc(blob)}</textarea>
+    <div class="actions"><button class="btn secondary" onclick="copyReport()">Copy</button>
+    <button class="btn primary" onclick="progress()">Back</button></div></div>`;
+}
+function importData(){
+  $('screen').innerHTML = `<div class="card"><div class="tag">Import</div>
+    <div class="hero"><h1>Paste your backup.</h1><p>This replaces the progress stored in this browser.</p></div>
+    <textarea class="report" id="imp" placeholder="Paste the exported JSON here"></textarea>
+    <div class="actions"><button class="btn secondary" onclick="progress()">Cancel</button>
+    <button class="btn primary" onclick="doImport()">Restore</button></div></div>`;
+}
+function doImport(){
+  try{
+    const s = JSON.parse($('imp').value);
+    if(!s || typeof s !== 'object' || !s.items) throw 0;
+    state = Object.assign(blank(), s); save(); alert('Progress restored.'); home();
+  }catch(e){ alert('That does not look like a valid backup.') }
+}
+function resetData(){
+  if(!confirm('Delete all progress on this device? Export a backup first if you are not sure.')) return;
+  state = blank(); save(); home();
+}
+
+/* ---------- arranque ---------- */
+if(!BANK.length){
+  $('screen').innerHTML = '<div class="card"><div class="tag">Setup</div><div class="hero"><h1>No content loaded.</h1><p>The content-*.js files must sit in the same folder as this page.</p></div></div>';
+} else {
+  save();
+  home();
+}
+</script>
+</body>
+</html>

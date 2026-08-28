@@ -1,0 +1,8 @@
+# Archivo generado por build-bundle.js: se reconstruye con `node build-bundle.js`
+tense-sprint.bundle.html
+
+# Ruido de OneDrive / Windows
+Thumbs.db
+desktop.ini
+*.tmp
+~$*
