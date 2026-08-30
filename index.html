@@ -25,19 +25,22 @@ body{margin:0;background:linear-gradient(155deg,#edf5ff,#f7f9fc 55%,#e9f7f2);fon
 .situation{font-size:1.05rem;line-height:1.5;margin:14px 0 9px;color:var(--muted)}
 .hint{display:inline-block;color:#725500;background:#fff6d8;border-radius:9px;padding:6px 10px;font-size:.85rem}
 .task{font-weight:750;font-size:1.1rem;line-height:1.45;margin:16px 0 12px}
-input,textarea{width:100%;border:2px solid #cdd9e8;border-radius:13px;font:inherit;padding:14px;outline:none;transition:.2s;background:#fff}
+input,textarea{width:100%;border:2px solid #cdd9e8;border-radius:13px;font:inherit;padding:14px;outline:none;transition:.2s;background:#fff;color:var(--ink)}
 input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px #2563eb1a}
+input:disabled{opacity:1;-webkit-text-fill-color:var(--ink);color:var(--ink)}
 textarea{min-height:170px;resize:vertical}
 .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
 .btn{border:0;border-radius:13px;padding:13px 16px;font:inherit;font-weight:800;cursor:pointer;min-height:48px}
 .primary{background:var(--blue);color:#fff;flex:1}
 .secondary{background:#eef3fa;color:#3d4b62}
+.danger{background:#fff0f0;color:var(--red)}
 .opts{display:grid;gap:9px;margin-top:6px}
-.opt{border:2px solid #cdd9e8;background:#fff;border-radius:13px;padding:14px;font:inherit;font-weight:700;text-align:left;cursor:pointer;min-height:52px}
+.opt{border:2px solid #cdd9e8;background:#fff;border-radius:13px;padding:14px;font:inherit;font-weight:700;text-align:left;cursor:pointer;min-height:52px;color:var(--ink)}
 .opt:hover{border-color:var(--blue)}
+.opt:disabled{opacity:1;cursor:default;-webkit-text-fill-color:currentColor}
 .opt.pick{border-color:var(--blue);background:#f2f7ff}
-.opt.ok{border-color:#3aa981;background:#e9f8f0}
-.opt.no{border-color:#e08e8e;background:#fff0f0}
+.opt.ok{border-color:#3aa981;background:#e9f8f0;color:#075e43}
+.opt.no{border-color:#e08e8e;background:#fff0f0;color:#8e2020}
 .feedback{margin-top:16px;padding:15px;border-radius:13px;line-height:1.5}
 .correct{background:#e9f8f0;color:#075e43}
 .almost{background:#fff7e6;color:#7a5200}
@@ -56,10 +59,9 @@ textarea{min-height:170px;resize:vertical}
 .mode small{color:var(--muted);line-height:1.35}
 .mode .badge{background:var(--blue);color:#fff;border-radius:99px;font-size:.75rem;font-weight:800;padding:4px 9px;white-space:nowrap}
 .mode .badge.grey{background:#e3eaf4;color:#5b6b83}
-.levels{display:flex;gap:8px;margin:0 0 16px}
-.lv{flex:1;border:1px solid var(--line);background:#fff;border-radius:13px;padding:11px 8px;font:inherit;font-weight:800;cursor:pointer;color:#5b6b83}
-.lv.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-.lv small{display:block;font-weight:600;font-size:.72rem;opacity:.7;margin-top:2px}
+.levelbar{display:flex;gap:2px;background:#e3eaf4;border-radius:99px;padding:3px;margin:0 0 16px}
+.seg{flex:1;border:0;background:transparent;border-radius:99px;padding:11px 8px;font:inherit;font-weight:800;font-size:.88rem;cursor:pointer;color:#5b6b83}
+.seg.on{background:#fff;color:var(--navy);box-shadow:0 1px 5px #1c315026}
 .stats{display:flex;gap:8px;margin:0 0 16px}
 .stat{flex:1;background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px 6px;text-align:center}
 .stat b{display:block;color:var(--blue);font-size:1.15rem}
@@ -212,13 +214,24 @@ function grade(item, given){
   for(const acc of item.a) if(isTypo(given, acc)) return 'almost';
   return 'wrong';
 }
-/* resalta la primera palabra que difiere */
+/* resalta las palabras de "given" que no encajan en "answer", alineando por
+   coincidencia (LCS) en vez de por indice: con indice, una contraccion que
+   se expande a dos palabras desalinea todo lo que viene despues y el diff
+   marca la frase entera aunque solo haya un error real. */
 function diffHtml(given, answer){
   const gw = normBase(given).split(' '), aw = normBase(answer).split(' ');
+  const n = gw.length, m = aw.length;
+  const dp = Array.from({length:n+1}, () => new Array(m+1).fill(0));
+  for(let i=n-1;i>=0;i--) for(let j=m-1;j>=0;j--)
+    dp[i][j] = gw[i]===aw[j] ? dp[i+1][j+1]+1 : Math.max(dp[i+1][j], dp[i][j+1]);
   const out = [];
-  for(let i=0;i<gw.length;i++){
-    out.push(gw[i] !== aw[i] ? '<span class="diff">'+esc(gw[i])+'</span>' : esc(gw[i]));
+  let i = 0, j = 0;
+  while(i<n && j<m){
+    if(gw[i]===aw[j]){ out.push(esc(gw[i])); i++; j++; }
+    else if(dp[i+1][j] >= dp[i][j+1]){ out.push('<span class="diff">'+esc(gw[i])+'</span>'); i++; }
+    else j++;
   }
+  while(i<n){ out.push('<span class="diff">'+esc(gw[i])+'</span>'); i++; }
   return out.join(' ');
 }
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -322,16 +335,17 @@ function home(){
   clearInterval(timer); timer = null;
   $('bar').style.width = '0%';
   const L = state.level;
-  $('topInfo').textContent = 'Level ' + L;
+  $('topInfo').textContent = '';
+  $('topInfo').classList.add('hide');
   const total = pool(L).length, due = dueCount(L), fresh = newCount(L), mast = masteredCount(L);
   const acc = state.totals.asked ? Math.round(state.totals.right/state.totals.asked*100) : 0;
   const ready = readiness(L);
-  const lvBtn = (lv,label,sub) =>
-    `<button class="lv ${state.level===lv?'on':''}" onclick="setLevel('${lv}')">${label}<small>${sub}</small></button>`;
+  const lvBtn = (lv,label) =>
+    `<button class="seg ${state.level===lv?'on':''}" onclick="setLevel('${lv}')">${label}</button>`;
   $('screen').innerHTML = `
-  <div class="levels">
-    ${lvBtn('A2','A2','consolidar')}
-    ${lvBtn('B1','B1','objetivo')}
+  <div class="levelbar">
+    ${lvBtn('A2','A2 · consolidar')}
+    ${lvBtn('B1','B1 · objetivo')}
   </div>
   <div class="stats">
     <div class="stat"><b>${due}</b><small>due today</small></div>
@@ -375,7 +389,8 @@ function topicPicker(){
       <span><strong>${t}</strong><small>${n} items &middot; ${s.pct===null?'not practised yet':s.pct+'% over '+s.n+' attempts'}</small></span>
       <span class="badge ${cls==='g'?'':'grey'}">${s.pct===null?'new':s.pct+'%'}</span></button>`;
   }).join('');
-  $('topInfo').textContent = 'Topics &middot; ' + L;
+  $('topInfo').classList.remove('hide');
+  $('topInfo').textContent = 'Topics · ' + L;
   $('screen').innerHTML = `<div class="hero"><div class="tag">${L} syllabus</div><h1>Pick your battle.</h1>
     <p>Red first. Ten questions per drill.</p></div><div class="menu">${rows}</div>
     <div class="actions" style="margin-top:16px"><button class="btn secondary" onclick="home()">Back</button></div>`;
@@ -384,6 +399,7 @@ function topicPicker(){
 function start(m, arg){
   mode = m; i = 0; picked = null; examLog = [];
   const L = state.level;
+  $('topInfo').classList.remove('hide');
   touchDay();
   if(m === 'topic'){
     const t = topicList[arg];
@@ -512,6 +528,7 @@ function skip(){
 function finish(){
   clearInterval(timer); timer = null;
   $('bar').style.width = '100%';
+  $('topInfo').classList.remove('hide');
   $('topInfo').textContent = 'Session complete';
   const L = state.level;
   snapshot(); save();
@@ -553,7 +570,8 @@ function finish(){
 function writing(){
   clearInterval(timer);
   const L = state.level, target = L === 'B1' ? 120 : 80;
-  $('topInfo').textContent = 'Writing &middot; ' + L;
+  $('topInfo').classList.remove('hide');
+  $('topInfo').textContent = 'Writing · ' + L;
   $('bar').style.width = '15%';
   const brief = L === 'B1'
     ? {task:'Write about a decision you had to make since you arrived in Ireland. Explain the situation, what you decided, and what you would do differently.',
@@ -610,7 +628,8 @@ function reviewWriting(){
 function progress(){
   clearInterval(timer);
   const L = state.level;
-  $('topInfo').textContent = 'Progress &middot; ' + L;
+  $('topInfo').classList.remove('hide');
+  $('topInfo').textContent = 'Progress · ' + L;
   $('bar').style.width = '100%';
   const rows = topicsOf(L).map(t => {
     const s = topicScore(L,t);
@@ -633,7 +652,7 @@ function progress(){
       <div class="actions"><button class="btn primary" onclick="downloadBackup()">Download snapshot</button>
       <button class="btn secondary" onclick="importData()">Import</button></div>
       <div class="actions"><button class="btn secondary" onclick="exportData()">Copy as text</button>
-      <button class="btn secondary" onclick="resetData()">Reset</button></div>
+      <button class="btn danger" onclick="resetData()">Reset</button></div>
       <div class="tiny">Save the snapshot into the <b>progreso/</b> folder and commit it.
       That is what turns this into a history you can actually look back on.</div></div>
   </div>`;
