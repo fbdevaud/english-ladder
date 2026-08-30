@@ -13,7 +13,7 @@
 :root{--navy:#12213a;--blue:#2563eb;--pale:#eef5ff;--ink:#182033;--muted:#667085;--green:#087f5b;--red:#c92a2a;--amber:#c77d00;--line:#d9e2ef}
 *{box-sizing:border-box}
 body{margin:0;background:linear-gradient(155deg,#edf5ff,#f7f9fc 55%,#e9f7f2);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh}
-.app{max-width:640px;margin:auto;padding:18px 16px 40px}
+.app{max-width:640px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom))}
 .top{display:flex;justify-content:space-between;align-items:center;margin:4px 0 14px}
 .brand{font-weight:850;font-size:1.18rem;color:var(--navy);cursor:pointer}
 .brand span{color:var(--blue)}
@@ -331,8 +331,15 @@ let q = [], i = 0, mode = 'practice', timer = null, picked = null, examLog = [];
 /* ============================================================
    PANTALLAS
    ============================================================ */
+/* atras del navegador (swipe/boton) vuelve a home en vez de salir de la app */
+function pushScreen(){
+  try{ if(!history.state || history.state.screen !== 'sub') history.pushState({screen:'sub'}, '', '#sub') }catch(e){}
+}
+try{ window.addEventListener('popstate', () => home()) }catch(e){}
+
 function home(){
   clearInterval(timer); timer = null;
+  try{ history.replaceState({screen:'home'}, '', '#home') }catch(e){}
   $('bar').style.width = '0%';
   const L = state.level;
   $('topInfo').textContent = '';
@@ -379,6 +386,7 @@ function setLevel(lv){ state.level = lv; save(); home() }
 
 let topicList = [];
 function topicPicker(){
+  pushScreen();
   const L = state.level;
   topicList = topicsOf(L);
   const rows = topicList.map((t,k) => {
@@ -397,6 +405,7 @@ function topicPicker(){
 }
 
 function start(m, arg){
+  pushScreen();
   mode = m; i = 0; picked = null; examLog = [];
   const L = state.level;
   $('topInfo').classList.remove('hide');
@@ -568,6 +577,7 @@ function finish(){
 
 /* ---------- writing ---------- */
 function writing(){
+  pushScreen();
   clearInterval(timer);
   const L = state.level, target = L === 'B1' ? 120 : 80;
   $('topInfo').classList.remove('hide');
@@ -626,6 +636,7 @@ function reviewWriting(){
 
 /* ---------- progreso y reporte ---------- */
 function progress(){
+  pushScreen();
   clearInterval(timer);
   const L = state.level;
   $('topInfo').classList.remove('hide');
