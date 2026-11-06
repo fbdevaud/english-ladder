@@ -27,7 +27,7 @@ Abrir la app: doble clic en **`index.html`**. Los cuatro archivos de contenido d
 
 ## 2. Cómo funciona (los cinco pilares)
 
-**1. Dos niveles, mismo motor.** Botones `A2` / `B1` arriba. Cada nivel tiene su propio syllabus, sus estadísticas y su tarea de escritura (80 palabras en A2, 120 en B1). El A2 no se archiva: queda como repaso de mantenimiento.
+**1. Tres niveles, mismo motor.** Botones `A2` / `B1` / `B2` arriba. Cada nivel tiene su propio syllabus, sus estadísticas y su tarea de escritura (80 palabras en A2, 120 en B1, 150 en B2). A2 y B1 no se archivan: quedan como repaso. El B2 es el nivel activo; por ahora se alimenta de los tests de clase (`content-clase.js`, que también define el syllabus B2).
 
 **2. Repetición espaciada (Leitner, 5 cajas).** Cada ítem sube de caja al acertarlo y vuelve a la caja 1 al fallarlo. Los intervalos son 10 min → 1 día → 3 días → 7 días → 21 días. La sesión diaria trae primero lo que vence hoy, luego lo nuevo. Un ítem alcanza *mastered* en la caja 4. **Esto es lo que convierte práctica en retención:** si sólo entras cuando te acuerdas, el sistema no puede hacer su trabajo.
 
@@ -60,7 +60,7 @@ Todo ejercicio es un objeto con esta forma. **Los campos sin marcar son obligato
 ```js
 {
  id:    'b1-ppps-005',   // único y estable: el progreso se guarda por id
- level: 'B1',            // 'A2' | 'B1'
+ level: 'B2',            // 'A2' | 'B1' | 'B2'
  skill: 'grammar',       // 'grammar' | 'vocab'
  topic: 'Present perfect vs past simple',  // debe existir en SYLLABUS
  type:  'fix',           // 'build' | 'fix' | 'gap' | 'choice'

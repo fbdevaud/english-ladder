@@ -15,10 +15,17 @@
    que indique su campo level ('A2' o 'B1').
    ============================================================ */
 
-/* Topic nuevo (no existia ninguno para "would rather"). Se agrega aqui
-   para no tocar los otros archivos; el motor lo lee igual que el resto. */
+/* Syllabus B2: por ahora vive aqui porque el nivel B2 se alimenta de tus
+   tests de clase (File Test 7 = Upper-Intermediate). Cuando haya un banco
+   B2 propio (content-b2-*.js), mueve esta lista a ese archivo. */
 window.SYLLABUS = window.SYLLABUS || {};
-window.SYLLABUS.B1 = (window.SYLLABUS.B1 || []).concat(['Would rather']);
+window.SYLLABUS.B2 = (window.SYLLABUS.B2 || []).concat([
+  'Collocations',
+  'Gerund vs infinitive',
+  'Connectors',
+  'Would rather',
+  'Confusing pairs'
+]);
 
 window.BANK = window.BANK || [];
 window.BANK.push(
@@ -201,7 +208,7 @@ window.BANK.push(
      Test ej. 5: dejados en blanco point / raise (voice, eyebrows) /
      shake (hands) / suck (thumb) / shrug (shoulders). */
 
-  {id:'cl-2026-11-05-001', level:'B1', skill:'vocab',
+  {id:'cl-2026-11-05-001', level:'B2', skill:'vocab',
    topic:'Collocations', type:'choice',
    src:'File Test 7 - 5 nov 2026',
    s:'Choose the correct verb.', h:'point your finger',
@@ -211,7 +218,7 @@ window.BANK.push(
    r:"<b>point (your finger) at someone</b> = aim your finger to show who or what you mean. It is considered rude when you do it to people.",
    es:"En espanol 'senalar con el dedo'; en ingles el verbo es point y la preposicion es at."},
 
-  {id:'cl-2026-11-05-002', level:'B1', skill:'vocab',
+  {id:'cl-2026-11-05-002', level:'B2', skill:'vocab',
    topic:'Collocations', type:'gap',
    src:'File Test 7 - 5 nov 2026',
    s:'Complete with the correct verb (past simple).', h:'eyebrows go up = surprise',
@@ -220,7 +227,7 @@ window.BANK.push(
    r:"<b>raise your eyebrows</b> = show surprise or doubt without speaking. <b>Raise your voice</b> = speak louder because you are angry.",
    es:"'Levantar las cejas' es raise your eyebrows; en ingles se usa el plural."},
 
-  {id:'cl-2026-11-05-003', level:'B1', skill:'vocab',
+  {id:'cl-2026-11-05-003', level:'B2', skill:'vocab',
    topic:'Collocations', type:'fix',
    src:'File Test 7 - 5 nov 2026',
    s:'Correct the sentence.', h:'shake hands',
@@ -229,7 +236,7 @@ window.BANK.push(
    r:"The fixed expression is <b>shake hands (with someone)</b>: always plural, no article. You can also say <i>shake someone's hand</i>.",
    es:"'Darse la mano' se dice con plural en ingles: shake hands, nunca 'shake the hand'."},
 
-  {id:'cl-2026-11-05-004', level:'B1', skill:'vocab',
+  {id:'cl-2026-11-05-004', level:'B2', skill:'vocab',
    topic:'Collocations', type:'gap',
    src:'File Test 7 - 5 nov 2026',
    s:'Complete with the correct verb (present simple, third person).', h:'a baby habit',
@@ -238,7 +245,7 @@ window.BANK.push(
    r:"<b>suck your thumb</b> = put your thumb in your mouth, like a small child. Other body habits: <b>bite your nails</b>, <b>crack your knuckles</b>.",
    es:"'Chuparse el dedo' es suck your thumb. Ojo: el dedo gordo de la mano es thumb, no 'big finger'."},
 
-  {id:'cl-2026-11-05-005', level:'B1', skill:'vocab',
+  {id:'cl-2026-11-05-005', level:'B2', skill:'vocab',
    topic:'Collocations', type:'gap',
    src:'File Test 7 - 5 nov 2026',
    s:'Complete with the correct body part.', h:'plural',
@@ -247,7 +254,7 @@ window.BANK.push(
    r:"<b>shrug your shoulders</b> = lift them for a moment to say \"I don't know\" or \"I don't care\".",
    es:"'Encogerse de hombros' es shrug your shoulders; en ingles tambien va en plural."},
 
-  {id:'cl-2026-11-05-006', level:'B1', skill:'vocab',
+  {id:'cl-2026-11-05-006', level:'B2', skill:'vocab',
    topic:'Collocations', type:'choice',
    src:'File Test 7 - 5 nov 2026',
    s:'Choose the correct verb.', h:'raise vs rise',
@@ -259,7 +266,7 @@ window.BANK.push(
 
   /* ===== PATRON E: feel like + -ing / look as though ===== */
 
-  {id:'cl-2026-11-05-007', level:'B1', skill:'grammar',
+  {id:'cl-2026-11-05-007', level:'B2', skill:'grammar',
    topic:'Gerund vs infinitive', type:'choice',
    src:'File Test 7 - 5 nov 2026',
    s:'Choose the correct option.', h:'= I do not want to',
@@ -269,7 +276,7 @@ window.BANK.push(
    r:"<b>feel like + -ing</b> = want to do something (informal). <i>Look like</i> and <i>sound like</i> describe appearance or sound, not what you want.",
    es:"'Tengo ganas de cocinar' no es look like: es feel like cooking. Look = lo que se ve."},
 
-  {id:'cl-2026-11-05-008', level:'B1', skill:'grammar',
+  {id:'cl-2026-11-05-008', level:'B2', skill:'grammar',
    topic:'Gerund vs infinitive', type:'fix',
    src:'File Test 7 - 5 nov 2026',
    s:'Correct the sentence.', h:'like is a preposition',
@@ -278,7 +285,7 @@ window.BANK.push(
    r:"In <b>feel like</b>, <i>like</i> is a preposition, so the verb after it takes <b>-ing</b>.",
    es:"Igual que look forward to + -ing: no es el 'to' del infinitivo, aqui 'like' es preposicion."},
 
-  {id:'cl-2026-11-05-009', level:'B1', skill:'grammar',
+  {id:'cl-2026-11-05-009', level:'B2', skill:'grammar',
    topic:'Gerund vs infinitive', type:'gap',
    src:'File Test 7 - 5 nov 2026',
    s:'Write the correct form of the verb in brackets.', h:'feel like + ...',
@@ -287,7 +294,7 @@ window.BANK.push(
    r:"<b>feel like + -ing</b>: <i>feel like having</i>, <i>feel like going</i>.",
    es:"'Me apetece tomar algo dulce' = I feel like having something sweet."},
 
-  {id:'cl-2026-11-05-010', level:'B1', skill:'grammar',
+  {id:'cl-2026-11-05-010', level:'B2', skill:'grammar',
    topic:'Connectors', type:'choice',
    src:'File Test 7 - 5 nov 2026',
    s:'Choose the correct option.', h:'as ___',
@@ -297,7 +304,7 @@ window.BANK.push(
    r:"<b>look as if / as though + clause</b> = it seems that. <i>As when</i> and <i>as that</i> do not exist in this structure.",
    es:"'Parece como si hubiera visto un fantasma' = as if / as though, no 'as when' ('como cuando')."},
 
-  {id:'cl-2026-11-05-011', level:'B1', skill:'grammar',
+  {id:'cl-2026-11-05-011', level:'B2', skill:'grammar',
    topic:'Connectors', type:'gap',
    src:'File Test 7 - 5 nov 2026',
    s:'Complete with the missing word.', h:'if / though',
@@ -306,7 +313,7 @@ window.BANK.push(
    r:"<b>as if</b> and <b>as though</b> mean the same. After <i>look / sound / feel / seem</i> they introduce a full clause.",
    es:"Los dos equivalen a 'como si'."},
 
-  {id:'cl-2026-11-05-012', level:'B1', skill:'grammar',
+  {id:'cl-2026-11-05-012', level:'B2', skill:'grammar',
    topic:'Connectors', type:'choice',
    src:'File Test 7 - 5 nov 2026',
    s:'Choose the correct option.', h:'noun or clause?',
@@ -318,7 +325,7 @@ window.BANK.push(
 
   /* ===== PATRON F: would rather ===== */
 
-  {id:'cl-2026-11-05-013', level:'B1', skill:'grammar',
+  {id:'cl-2026-11-05-013', level:'B2', skill:'grammar',
    topic:'Would rather', type:'gap',
    src:'File Test 7 - 5 nov 2026',
    s:'Write the correct form of the verb in brackets.', h:'different subject',
@@ -327,7 +334,7 @@ window.BANK.push(
    r:"<b>would rather + different subject + past simple</b> (it refers to the present or future): <i>I'd rather you didn't leave</i>. Informally you may hear <i>don't</i>, but the exam answer is the past simple.",
    es:"En espanol usas subjuntivo ('prefiero que no dejes'); en ingles el tiempo pasado hace ese trabajo."},
 
-  {id:'cl-2026-11-05-014', level:'B1', skill:'grammar',
+  {id:'cl-2026-11-05-014', level:'B2', skill:'grammar',
    topic:'Would rather', type:'gap',
    src:'File Test 7 - 5 nov 2026',
    s:'Write the correct form of the verb in brackets.', h:'same subject',
@@ -336,7 +343,7 @@ window.BANK.push(
    r:"<b>would rather + same subject + (not) + base form</b>: <i>he'd rather not come</i>. No -s, no <i>doesn't</i>, no <i>to</i>.",
    es:"'Prefiere no venir' = he'd rather not come. El auxiliar 'would' ya lleva la conjugacion; el verbo siguiente queda en base."},
 
-  {id:'cl-2026-11-05-015', level:'B1', skill:'grammar',
+  {id:'cl-2026-11-05-015', level:'B2', skill:'grammar',
    topic:'Would rather', type:'gap',
    src:'File Test 7 - 5 nov 2026',
    s:'Write the correct form of the verb in brackets.', h:'different subject, be',
@@ -347,7 +354,7 @@ window.BANK.push(
 
   /* ===== PATRON G: avoid vs prevent (Confusing pairs) ===== */
 
-  {id:'cl-2026-11-05-016', level:'B1', skill:'vocab',
+  {id:'cl-2026-11-05-016', level:'B2', skill:'vocab',
    topic:'Confusing pairs', type:'choice',
    src:'File Test 7 - 5 nov 2026',
    s:'Choose the correct verb.', h:'prevent + object + from',
@@ -357,7 +364,7 @@ window.BANK.push(
    r:"<b>prevent someone from doing</b> = make it impossible. <b>Avoid doing</b> = stay away from something yourself, with no <i>from</i>.",
    es:"'Evitar' cubre los dos usos; en ingles: avoid (tu lo evitas) vs prevent (impides que otro lo haga)."},
 
-  {id:'cl-2026-11-05-017', level:'B1', skill:'vocab',
+  {id:'cl-2026-11-05-017', level:'B2', skill:'vocab',
    topic:'Confusing pairs', type:'fix',
    src:'File Test 7 - 5 nov 2026',
    s:'Correct the sentence.', h:'avoid + -ing',
@@ -366,7 +373,7 @@ window.BANK.push(
    r:"You do the action to stay away from something yourself: <b>avoid + -ing</b>. <i>Prevent</i> needs someone else to be stopped.",
    es:"'Evitar pagar' es avoid paying; prevent exige 'impedir que alguien...'."},
 
-  {id:'cl-2026-11-05-018', level:'B1', skill:'vocab',
+  {id:'cl-2026-11-05-018', level:'B2', skill:'vocab',
    topic:'Confusing pairs', type:'fix',
    src:'File Test 7 - 5 nov 2026',
    s:'Correct the sentence.', h:'prevent',
@@ -377,7 +384,7 @@ window.BANK.push(
 
   /* ===== PATRON H: rise vs raise (ej. 4 item 7, confirmado despues) ===== */
 
-  {id:'cl-2026-11-06-001', level:'B1', skill:'vocab',
+  {id:'cl-2026-11-06-001', level:'B2', skill:'vocab',
    topic:'Confusing pairs', type:'choice',
    src:'File Test 7 - 5 nov 2026',
    s:'Choose the correct form.', h:'no object after the verb',
@@ -387,7 +394,7 @@ window.BANK.push(
    r:"<b>rise - rose - risen</b> has no object: things go up by themselves. <b>Raise - raised - raised</b> needs an object. <i>Rised</i> does not exist.",
    es:"Rise es irregular (rose, risen). No existe 'rised'."},
 
-  {id:'cl-2026-11-06-002', level:'B1', skill:'vocab',
+  {id:'cl-2026-11-06-002', level:'B2', skill:'vocab',
    topic:'Confusing pairs', type:'fix',
    src:'File Test 7 - 5 nov 2026',
    s:'Correct the sentence.', h:'raise + object',
@@ -396,7 +403,7 @@ window.BANK.push(
    r:"Someone makes the salaries go up, so the verb has an object: <b>raise</b> (raised). <i>Rise</i> never takes an object.",
    es:"'Subir los sueldos' (alguien los sube) = raise; 'los sueldos suben' = rise."},
 
-  {id:'cl-2026-11-06-003', level:'B1', skill:'vocab',
+  {id:'cl-2026-11-06-003', level:'B2', skill:'vocab',
    topic:'Confusing pairs', type:'gap',
    src:'File Test 7 - 5 nov 2026',
    s:'Write the correct past simple form of the verb in brackets.', h:'rise - ? - risen',

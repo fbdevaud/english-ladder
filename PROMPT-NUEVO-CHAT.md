@@ -58,7 +58,7 @@ Reglas del formato, respétalas:
 - `type` sólo puede ser: `build` (escribir la frase completa desde pistas separadas por `/`),
   `fix` (corregir la frase), `gap` (el enunciado **debe** llevar `___` y se responde sólo
   lo que falta), o `choice` (añade `options:['a','b','c']`, y `a[0]` debe estar entre ellas).
-- `level` sólo `'A2'` o `'B1'`. `skill` sólo `'grammar'` o `'vocab'`.
+- `level` sólo `'A2'`, `'B1'` o `'B2'` (el material de la clase actual es B2). `skill` sólo `'grammar'` o `'vocab'`.
 - En `choice`, las distractoras deben ser **inequívocamente** incorrectas.
 - No listes variantes de contracción en `a`: `doesn't` ya equivale a `does not`.
   Sí lista alternativas reales (`who` / `that`, con y sin `that` en reported speech).
