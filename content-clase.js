@@ -373,6 +373,36 @@ window.BANK.push(
    t:"The rain couldn't avoid us from enjoying the day.",
    a:["the rain couldn't prevent us from enjoying the day"],
    r:"With <b>from</b> you need <b>prevent</b>: <i>prevent someone from doing</i>. <i>Avoid</i> never takes <i>from</i>.",
-   es:"'No pudo evitar que disfrutaramos' = couldn't prevent us from enjoying."}
+   es:"'No pudo evitar que disfrutaramos' = couldn't prevent us from enjoying."},
+
+  /* ===== PATRON H: rise vs raise (ej. 4 item 7, confirmado despues) ===== */
+
+  {id:'cl-2026-11-06-001', level:'B1', skill:'vocab',
+   topic:'Confusing pairs', type:'choice',
+   src:'File Test 7 - 5 nov 2026',
+   s:'Choose the correct form.', h:'no object after the verb',
+   t:'Prices have ___ again this month.',
+   options:['risen','raised','rised'],
+   a:['risen'],
+   r:"<b>rise - rose - risen</b> has no object: things go up by themselves. <b>Raise - raised - raised</b> needs an object. <i>Rised</i> does not exist.",
+   es:"Rise es irregular (rose, risen). No existe 'rised'."},
+
+  {id:'cl-2026-11-06-002', level:'B1', skill:'vocab',
+   topic:'Confusing pairs', type:'fix',
+   src:'File Test 7 - 5 nov 2026',
+   s:'Correct the sentence.', h:'raise + object',
+   t:'The company has risen the salaries of all its staff.',
+   a:['the company has raised the salaries of all its staff'],
+   r:"Someone makes the salaries go up, so the verb has an object: <b>raise</b> (raised). <i>Rise</i> never takes an object.",
+   es:"'Subir los sueldos' (alguien los sube) = raise; 'los sueldos suben' = rise."},
+
+  {id:'cl-2026-11-06-003', level:'B1', skill:'vocab',
+   topic:'Confusing pairs', type:'gap',
+   src:'File Test 7 - 5 nov 2026',
+   s:'Write the correct past simple form of the verb in brackets.', h:'rise - ? - risen',
+   t:'Unemployment ___ (rise) by two per cent last year.',
+   a:['rose'],
+   r:"Past simple of <b>rise</b> is <b>rose</b>. <i>Last year</i> is finished time, so past simple, not present perfect.",
+   es:"Pasado de rise = rose (no 'rised'); ojo con no confundirlo con la rosa."}
 
 );
