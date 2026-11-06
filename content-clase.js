@@ -410,6 +410,36 @@ window.BANK.push(
    t:'Unemployment ___ (rise) by two per cent last year.',
    a:['rose'],
    r:"Past simple of <b>rise</b> is <b>rose</b>. <i>Last year</i> is finished time, so past simple, not present perfect.",
-   es:"Pasado de rise = rose (no 'rised'); ojo con no confundirlo con la rosa."}
+   es:"Pasado de rise = rose (no existe 'rised')."},
+
+  /* ===== PATRON I: rob vs steal (ej. 4 item 9, confirmado despues) ===== */
+
+  {id:'cl-2026-11-06-004', level:'B2', skill:'vocab',
+   topic:'Confusing pairs', type:'choice',
+   src:'File Test 7 - 5 nov 2026',
+   s:'Choose the correct verb.', h:'the victim is a place',
+   t:'Two men ___ the bank on Main Street yesterday.',
+   options:['robbed','stole','took'],
+   a:['robbed'],
+   r:"<b>rob + victim</b> (a person or a place): <i>rob a bank, rob a shop, rob someone</i>. <b>Steal + thing</b>: <i>steal money, steal a bike</i>.",
+   es:"En espanol 'robar' sirve para los dos casos; en ingles rob = a quien (o a donde), steal = que cosa."},
+
+  {id:'cl-2026-11-06-005', level:'B2', skill:'vocab',
+   topic:'Confusing pairs', type:'fix',
+   src:'File Test 7 - 5 nov 2026',
+   s:'Correct the sentence.', h:'a bike is a thing',
+   t:'Someone robbed my bike outside the library.',
+   a:['someone stole my bike outside the library'],
+   r:"The bike is the thing that was taken, so use <b>steal</b>. <i>Rob</i> needs the victim: <i>Someone robbed me</i>.",
+   es:"'Me robaron la bici' = they stole my bike; 'me robaron a mi' = they robbed me."},
+
+  {id:'cl-2026-11-06-006', level:'B2', skill:'vocab',
+   topic:'Confusing pairs', type:'gap',
+   src:'File Test 7 - 5 nov 2026',
+   s:'Write the correct past participle (rob or steal).', h:'I am the victim',
+   t:'I was ___ on the bus, and they took my wallet.',
+   a:['robbed'],
+   r:"The subject <i>I</i> is the victim, so <b>was robbed</b>. If the subject is the object taken: <i>My wallet was stolen</i>.",
+   es:"Pasiva con persona o lugar = robbed; con la cosa = stolen."}
 
 );
