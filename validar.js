@@ -43,7 +43,8 @@ const bad = (m) => { fails++; console.log('  x ' + m); };
 
 console.log('Items cargados: ' + BANK.length +
   ' (A2 ' + BANK.filter(x=>x.level==='A2').length +
-  ' / B1 ' + BANK.filter(x=>x.level==='B1').length + ')');
+  ' / B1 ' + BANK.filter(x=>x.level==='B1').length +
+  ' / B2 ' + BANK.filter(x=>x.level==='B2').length + ')');
 
 // 1. ids unicos + campos obligatorios
 const seen = new Set();
@@ -55,7 +56,7 @@ BANK.forEach(x => {
     if(x[k] === undefined || x[k] === '') bad(x.id + ' falta campo ' + k);
   });
   if(!Array.isArray(x.a) || !x.a.length) bad(x.id + ' campo a vacio');
-  if(!['A2','B1'].includes(x.level)) bad(x.id + ' level invalido');
+  if(!['A2','B1','B2'].includes(x.level)) bad(x.id + ' level invalido');
   if(!['build','fix','gap','choice'].includes(x.type)) bad(x.id + ' type invalido: ' + x.type);
 });
 
@@ -109,7 +110,7 @@ cases.forEach(([id,input,want]) => {
 });
 
 // 7. sesiones se construyen sin explotar
-['A2','B1'].forEach(lv => {
+['A2','B1','B2'].forEach(lv => {
   vm.runInContext('state.level="'+lv+'"', sandbox);
   const s = sandbox.buildSession(lv, 20);
   if(!s.length) bad('buildSession vacia para ' + lv);

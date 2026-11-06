@@ -101,15 +101,17 @@ textarea{min-height:170px;resize:vertical}
    MOTOR - no contiene ejercicios. El contenido vive en content-*.js
    ============================================================ */
 const BANK = window.BANK || [];
-const SYLLABUS = window.SYLLABUS || {A2:[],B1:[]};
+const SYLLABUS = window.SYLLABUS || {A2:[],B1:[],B2:[]};
 const KEY = 'englishLadder_v1';
 const DAY = 86400000;
 /* Leitner: intervalo hasta la proxima vez, por caja */
 const BOX_MS = [0, 10*60000, 1*DAY, 3*DAY, 7*DAY, 21*DAY];
 const MASTERED_BOX = 4;
+/* palabras objetivo de la tarea de escritura, por nivel */
+const WORDS = {A2:80, B1:120, B2:150};
 
 /* ---------- estado ---------- */
-function blank(){return{v:6,level:'B1',items:{},topics:{},errors:[],totals:{asked:0,right:0},
+function blank(){return{v:6,level:'B2',items:{},topics:{},errors:[],totals:{asked:0,right:0},
   streak:0,lastDay:null,days:[],writing:{},check:{}}}
 let state = load();
 function load(){
@@ -351,8 +353,9 @@ function home(){
     `<button class="seg ${state.level===lv?'on':''}" onclick="setLevel('${lv}')">${label}</button>`;
   $('screen').innerHTML = `
   <div class="levelbar">
-    ${lvBtn('A2','A2 · consolidar')}
-    ${lvBtn('B1','B1 · objetivo')}
+    ${lvBtn('A2','A2 · repaso')}
+    ${lvBtn('B1','B1 · base')}
+    ${lvBtn('B2','B2 · objetivo')}
   </div>
   <div class="stats">
     <div class="stat"><b>${due}</b><small>due today</small></div>
@@ -374,8 +377,8 @@ function home(){
       <span><strong>Exam mode &middot; 30 minutes</strong><small>Timed, no hints, no feedback. Simulates class conditions.</small></span>
       <span class="badge grey">18 q</span></button>
     <button class="mode" onclick="writing()">
-      <span><strong>Writing task</strong><small>${L==='B1'?'120 words: opinion, story or email.':'80 words with tense targets.'}</small></span>
-      <span class="badge grey">${L==='B1'?'120 w':'80 w'}</span></button>
+      <span><strong>Writing task</strong><small>${L==='B2'?'150 words: tell a story, speculate and reflect.':L==='B1'?'120 words: opinion, story or email.':'80 words with tense targets.'}</small></span>
+      <span class="badge grey">${WORDS[L]} w</span></button>
     <button class="mode" onclick="progress()">
       <span><strong>Progress &amp; report</strong><small>Topic map, and the report you paste into a new chat.</small></span>
       <span class="badge grey">&rarr;</span></button>
@@ -579,11 +582,19 @@ function finish(){
 function writing(){
   pushScreen();
   clearInterval(timer);
-  const L = state.level, target = L === 'B1' ? 120 : 80;
+  const L = state.level, target = WORDS[L];
   $('topInfo').classList.remove('hide');
   $('topInfo').textContent = 'Writing · ' + L;
   $('bar').style.width = '15%';
-  const brief = L === 'B1'
+  const brief = L === 'B2'
+    ? {task:'Write about a time something went wrong (a trip, a job, a misunderstanding). Explain what happened, what you should have done differently, and what might have caused it.',
+       list:['Past modals: should have / shouldn\'t have, might have, must have, can\'t have',
+             'Would rather: at least one sentence, with and without a different subject',
+             'As if / as though: one sentence describing how someone looked or sounded',
+             'Two linking words: even though / despite / whereas / in spite of',
+             'Two collocations or body-language expressions (raise your eyebrows, shake hands...)',
+             'Reported speech or the passive: at least one sentence']}
+    : L === 'B1'
     ? {task:'Write about a decision you had to make since you arrived in Ireland. Explain the situation, what you decided, and what you would do differently.',
        list:['Present perfect vs past simple: what has changed since you arrived',
              'Past perfect: what had happened before the decision',
@@ -608,15 +619,21 @@ function writing(){
 }
 const wordCount = t => t.trim() ? t.trim().split(/\s+/).length : 0;
 function countWords(){
-  const L = state.level, target = L === 'B1' ? 120 : 80;
+  const L = state.level, target = WORDS[L];
   state.writing[L] = $('wtext').value; save();
   $('wc').textContent = wordCount($('wtext').value) + ' / ' + target + ' words';
 }
 function reviewWriting(){
-  const L = state.level, target = L === 'B1' ? 120 : 80;
+  const L = state.level, target = WORDS[L];
   const n = wordCount(state.writing[L] || '');
   $('bar').style.width = '100%';
-  const checks = L === 'B1'
+  const checks = L === 'B2'
+    ? ['After <i>should have / might have / must have</i>, is the verb a past participle (and <i>can\'t have</i> for impossible deductions)?',
+       'After <i>would rather</i> with the same subject, did you use the base verb (no -s, no <i>to</i>)? With a different subject, a past form?',
+       'After <i>feel like</i> or <i>look forward to</i>, did you use -ing?',
+       'Did you use <i>avoid + -ing</i> and <i>prevent someone from + -ing</i> correctly?',
+       'After <i>despite / in spite of</i>, only a noun or -ing? After <i>even though</i>, a full clause?']
+    : L === 'B1'
     ? ['Did you use present perfect for changes with no fixed date, and past simple when you named the moment?',
        'Is there at least one <i>would</i> sentence with a past-simple <i>if</i> clause?',
        'After <i>although</i>, is there a subject + verb? After <i>despite</i>, only a noun or -ing?',
@@ -708,7 +725,7 @@ function buildReport(){
   line.push('=== TENSE SPRINT / REPORTE ' + today() + ' ===');
   line.push('Nivel activo: ' + L + ' | Racha: ' + state.streak + ' dias | Precision global: ' +
     (state.totals.asked ? Math.round(state.totals.right/state.totals.asked*100) : 0) + '% (' + state.totals.asked + ' intentos)');
-  ['A2','B1'].forEach(lv => {
+  ['A2','B1','B2'].forEach(lv => {
     const items = pool(lv);
     if(!items.length) return;
     line.push('');
