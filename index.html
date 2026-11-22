@@ -77,6 +77,22 @@ textarea{min-height:170px;resize:vertical}
 .tbar{height:7px;background:#e6ecf5;border-radius:20px;overflow:hidden}
 .tbar i{display:block;height:100%;border-radius:20px}
 .g{background:#2f9e6e}.y{background:#e0a419}.r{background:#d55b5b}.n{background:#c9d3e0}
+.qsummary{font-weight:750;color:var(--ink);margin:0 0 6px;font-size:.95rem}
+.filterbar{display:flex;gap:8px;margin:16px 0 4px;flex-wrap:wrap}
+.fbtn{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 13px;font:inherit;font-size:.82rem;font-weight:750;color:#5b6b83;cursor:pointer}
+.fbtn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.qrow{border:1px solid var(--line);border-radius:15px;padding:13px 15px;margin-top:10px}
+.qhead{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.qnum{font-size:.78rem;color:var(--muted);font-weight:800;font-variant-numeric:tabular-nums}
+.qtopic{font-size:.78rem;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qbadge{font-size:.72rem;font-weight:800;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.qbadge.ok{background:#e9f8f0;color:#075e43}
+.qbadge.almost{background:#fff7e6;color:#7a5200}
+.qbadge.wrong{background:#fff0f0;color:#8e2020}
+.qtask{font-weight:700;line-height:1.4;margin-bottom:5px}
+.qgiven{font-size:.9rem;margin:4px 0}
+.qsol{background:var(--pale);border-radius:9px;padding:8px 11px;margin:6px 0;font-weight:700;font-size:.92rem}
+.qrule{font-size:.85rem;color:var(--muted);line-height:1.4}
 .report{width:100%;min-height:230px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;line-height:1.45}
 .sect{margin-top:22px}
 .sect h3{font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 10px}
@@ -327,6 +343,7 @@ function readiness(level){
 
 /* ---------- estado de sesion ---------- */
 let q = [], i = 0, mode = 'practice', timer = null, picked = null, examLog = [];
+let lastLog = [], reviewFilter = 'wrong';
 
 /* ============================================================
    PANTALLAS
@@ -483,9 +500,13 @@ function check(){
     state.errors = state.errors.slice(0,40);
   }
   save();
+  /* una entrada por pregunta: el veredicto que cuenta es el del primer intento;
+     la repesca solo se anota como retry */
+  const prev = examLog.find(e => e.item === x);
+  if(prev){ if(!prev.retry) prev.retry = verdict; }
+  else examLog.push({item:x, given, verdict});
 
   if(mode === 'exam' || mode === 'check'){
-    examLog.push({item:x, given, verdict});
     if(verdict === 'wrong' && mode === 'exam'){ /* sin repesca en examen */ }
     i++;
     return i < q.length ? render() : finish();
@@ -561,18 +582,60 @@ function finish(){
     return;
   }
 
-  const ok = examLog.length ? examLog.filter(e => e.verdict !== 'wrong').length : null;
-  const missed = state.errors.filter(e => e.at === today()).slice(0,6);
-  const missedHtml = missed.length
-    ? `<div class="checklist"><b>Today's misses</b><br>${missed.map(m =>
-        `&bull; <i>${esc(m.given)}</i> &rarr; <b>${esc(m.want)}</b>`).join('<br>')}</div>`
-    : `<div class="checklist"><b>No errors recorded today.</b><br>Come back tomorrow: the spacing is what makes it stick.</div>`;
+  const total = examLog.length;
+  const ok = total ? examLog.filter(e => e.verdict !== 'wrong').length : null;
+  const wrongCount = total ? total - ok : 0;
+  lastLog = examLog.slice();
+  reviewFilter = wrongCount > 0 ? 'wrong' : 'all';
+  const reviewHtml = total
+    ? `<div class="filterbar">
+        <button class="fbtn" data-f="wrong" onclick="setReviewFilter('wrong')">To review (${wrongCount})</button>
+        <button class="fbtn" data-f="all" onclick="setReviewFilter('all')">All (${total})</button>
+        <button class="fbtn" data-f="ok" onclick="setReviewFilter('ok')">Correct (${ok})</button>
+      </div><div id="reviewList"></div>`
+    : `<div class="checklist"><b>No questions answered.</b></div>`;
   $('screen').innerHTML = `<div class="card"><div class="tag">${mode === 'exam' ? 'Exam mode complete' : 'Session complete'}</div>
-    <div class="hero"><h1>${ok !== null ? ok + ' / ' + examLog.length : 'Well done.'}</h1>
+    <div class="hero"><h1>${ok !== null ? ok + ' / ' + total : 'Well done.'}</h1>
+    ${ok !== null ? `<p class="qsummary">${ok} correct &middot; ${wrongCount} wrong</p>` : ''}
     <p>${masteredCount(L)} of ${pool(L).length} ${L} items are now in long-term review. ${dueCount(L)} due again today.</p></div>
-    ${missedHtml}
+    ${reviewHtml}
     <div class="actions"><button class="btn secondary" onclick="home()">Home</button>
     <button class="btn primary" onclick="start('practice')">Another round</button></div></div>`;
+  if(total) setReviewFilter(reviewFilter);
+}
+/* fila por pregunta de la sesion: numero, tu respuesta y, si fallaste, la
+   solucion y la regla. Usa examLog (esta sesion), nunca state.errors, que
+   mezcla errores de todo el dia y no trae ni el numero ni el enunciado. */
+function reviewRows(log, filter){
+  const rows = log.map((e,idx) => ({e, idx})).filter(({e}) => {
+    if(filter === 'wrong') return e.verdict === 'wrong';
+    if(filter === 'ok') return e.verdict !== 'wrong';
+    return true;
+  });
+  if(!rows.length){
+    const msg = filter === 'wrong' ? 'No errors here — nice.' : 'Nothing in this filter.';
+    return `<div class="checklist">${msg}</div>`;
+  }
+  return rows.map(({e, idx}) => {
+    const x = e.item;
+    const fixed = e.verdict === 'wrong' && e.retry && e.retry !== 'wrong';
+    const badge = fixed ? 'almost' : e.verdict === 'right' ? 'ok' : e.verdict === 'almost' ? 'almost' : 'wrong';
+    const label = fixed ? 'Fixed on retry' : e.verdict === 'right' ? 'Correct' : e.verdict === 'almost' ? 'Almost' : 'Wrong';
+    const needsFix = e.verdict !== 'right';
+    return `<div class="qrow">
+      <div class="qhead"><span class="qnum">#${idx+1}</span><span class="qtopic">${esc(x.topic)}</span><span class="qbadge ${badge}">${label}</span></div>
+      <div class="qtask">${x.t}</div>
+      <div class="qgiven">You wrote: ${needsFix ? diffHtml(e.given, x.a[0]) : esc(e.given)}</div>
+      ${needsFix ? `<div class="qsol">${esc(x.a[0])}</div><div class="qrule">${x.r}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+function setReviewFilter(f){
+  reviewFilter = f;
+  const list = $('reviewList');
+  if(!list) return;
+  list.innerHTML = reviewRows(lastLog, f);
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('on', b.dataset.f === f));
 }
 
 /* ---------- writing ---------- */

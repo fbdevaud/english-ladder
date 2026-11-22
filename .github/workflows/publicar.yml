@@ -1,0 +1,60 @@
+# Lleva a main los pushes a ramas claude/* que SOLO tocan contenido de clase,
+# con el validador en OK y sin conflictos. Cualquier otra cosa falla en rojo
+# y no toca main.
+name: publicar
+
+on:
+  push:
+    branches: ['claude/**']
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: publicar-main
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Solo archivos de contenido
+        run: |
+          git fetch origin main
+          base=$(git merge-base origin/main HEAD)
+          cambios=$(git diff --name-only "$base" HEAD)
+          echo "Archivos cambiados:"; echo "$cambios"
+          [ -n "$cambios" ] || { echo "Nada que publicar"; exit 1; }
+          otros=$(echo "$cambios" | grep -vxE 'content-clase\.js|glossary\.js' || true)
+          if [ -n "$otros" ]; then
+            echo "::error::La rama toca archivos que no son de contenido: $otros"
+            exit 1
+          fi
+
+      - name: Rebase limpio sobre main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rebase origin/main || { git rebase --abort; echo "::error::Conflicto con main"; exit 1; }
+
+      - name: Validar
+        run: node validar.js
+
+      - name: Publicar en main
+        run: git push origin HEAD:main
+
+      # Un push hecho con GITHUB_TOKEN no dispara otros workflows ni, en algunos
+      # casos, el build de Pages "deploy from a branch": se pide explicito.
+      - name: Pedir build de Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "::warning::No se pudo pedir el build de Pages"

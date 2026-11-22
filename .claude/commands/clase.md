@@ -44,7 +44,29 @@ la clase.
 Ejecuta `node validar.js`. Debe terminar en `OK: sin problemas`. Si falla, arregla el
 contenido y vuelve a correrlo — no entregues nada con el validador en rojo.
 
-**5. Cierra con lo accionable.**
+**5. Publica (sólo con el validador en verde).**
+Si y sólo si `node validar.js` terminó en `OK: sin problemas`:
+
+```bash
+for f in content-clase.js glossary.js; do [ -f "$f" ] && git add "$f"; done
+git commit -m "Clase <referencia>: N ejercicios de <temas>"
+git pull --rebase origin main
+node validar.js            # de nuevo, ya con lo que traiga main
+git push origin HEAD:main || git push origin HEAD
+```
+
+El mensaje va en español y describe la clase (referencia, cuántos ítems, qué temas).
+Commitea sólo los archivos de contenido de clase, nunca `progreso/`, `index.html` ni
+otros archivos. Si el validador falla (antes o después del rebase), **no hagas push**:
+explica qué falló. Si el rebase tiene conflictos, detente y dilo.
+
+Si el push directo a `main` es rechazado (por ejemplo, en una sesión cloud que sólo puede
+pushear su rama `claude/...`), el segundo `git push` sube la rama actual. La Action
+`publicar` la lleva a `main` sola si sólo toca archivos de contenido y el validador da OK.
+Nunca uses `--force`. Di siempre en qué terminó: "publicado en main" o "subido a la rama
+X, esperando la Action publicar". Pages actualiza la app en uno o dos minutos.
+
+**6. Cierra con lo accionable.**
 Dile cuántos ítems agregaste, a qué temas, y **cuál es el único hueco que más le conviene
 atacar esta semana**. Una prioridad, no una lista de ocho.
 

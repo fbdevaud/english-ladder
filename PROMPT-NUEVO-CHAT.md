@@ -14,7 +14,11 @@ No necesitas pegar nada. Escribe:
 
 …adjunta las fotos, y envía. El comando ya está instalado en `.claude/commands/clase.md`:
 lee la guía del proyecto, transcribe las imágenes, diagnostica los patrones de error,
-escribe los ejercicios nuevos en `content-clase.js` y corre el validador.
+escribe los ejercicios nuevos en `content-clase.js`, corre el validador y, si da
+`OK: sin problemas`, hace commit y push a `main` (la app se publica sola en Pages).
+
+Funciona igual desde el celular: Claude Code en **claude.ai/code** sobre el repo
+`english-ladder` (detalle en la sección 7 de `GUIA-DEL-PROYECTO.md`).
 
 Es la vía recomendada: es la única donde Claude puede **editar los archivos por ti**.
 

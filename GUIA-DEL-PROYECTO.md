@@ -115,7 +115,27 @@ Comprueba: sintaxis de los cuatro archivos, ids únicos, campos obligatorios, qu
 fotos del test y envía. El comando ya hace todo el flujo. Es la única vía donde Claude
 puede editar los archivos por ti.
 
-**Fuera de Claude Code** (claude.ai, móvil): usa el prompt de `PROMPT-NUEVO-CHAT.md`.
+### Desde el celular (sin PC)
+
+1. Abre Claude Code en la web o la app (**claude.ai/code**) y crea una sesión sobre el repo
+   `english-ladder`.
+2. Escribe `/clase 28 ago - unit 4`, adjunta las fotos y envía.
+3. El comando genera los ejercicios, corre `node validar.js` y, si sale `OK: sin problemas`,
+   hace commit y push a `main`. Si la sesión no puede pushear a `main`, sube su rama
+   `claude/...` y la Action `publicar` la lleva a `main` sola, pero sólo si toca únicamente
+   archivos de contenido y el validador da OK. Si algo falla, no publica nada.
+4. GitHub Pages actualiza la app en 1–2 minutos. En GitHub → *Actions*, `validar` o
+   `publicar` debe quedar en verde; si sale en rojo, ese cambio no se publicó o rompió algo.
+
+Requisitos a verificar la primera vez: que el entorno cloud de Claude Code tenga acceso de
+escritura al repo (GitHub conectado y el repo autorizado) y que tenga Node disponible
+(`node --version`). Sin push, el cambio no llega al celular.
+
+**Si alternas celular y PC:** antes de trabajar en el PC, haz `git pull`. Lo que subiste
+desde el celular está en GitHub, no en tu carpeta, hasta que lo traes. (`/clase` ya hace
+`git pull --rebase` antes de pushear, pero cualquier otro cambio manual no.)
+
+**Fuera de Claude Code** (claude.ai sin Code): usa el prompt de `PROMPT-NUEVO-CHAT.md`.
 Te devolverá un bloque de código que pegas tú en `content-clase.js`.
 
 Versión corta para pegar junto con tu reporte:
