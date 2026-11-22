@@ -40,6 +40,11 @@ Escríbelos en **`content-clase.js`**, nunca en `content-a2.js`, `content-b1-*.j
 `index.html`. Usa ids `cl-AAAA-MM-DD-NNN` y rellena el campo `src` con la referencia de
 la clase.
 
+Glosario: toda palabra nueva de `t` y `options` debe quedar en **`glossary.js`** (en
+minúscula, tal como aparece → traducción breve al español). Para expresiones de varias
+palabras (phrasal verbs, collocations) usa el campo `g` del ítem, pero nunca para la
+expresión que el alumno debe completar en un `gap`: `g` no puede delatar la respuesta.
+
 **4. Valida.**
 Ejecuta `node validar.js`. Debe terminar en `OK: sin problemas`. Si falla, arregla el
 contenido y vuelve a correrlo — no entregues nada con el validador en rojo.

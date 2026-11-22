@@ -67,6 +67,10 @@ Reglas del formato, respétalas:
 - No listes variantes de contracción en `a`: `doesn't` ya equivale a `does not`.
   Sí lista alternativas reales (`who` / `that`, con y sin `that` en reported speech).
 - `r` en inglés. `es` sólo cuando el error nazca de traducir del español.
+- Glosario: lista aparte las palabras de `t` y `options` que no sean de uso básico, como
+  líneas para `glossary.js` (`palabra:'traducción breve',`, en minúscula y tal como aparece).
+  Para expresiones de varias palabras agrega al ítem `g:{'set off':'salir (de viaje)'}`,
+  pero nunca para la expresión que hay que completar en un `gap`: `g` no puede delatar la respuesta.
 - Los `topic` deben repetirse entre semanas para que mis estadísticas se acumulen.
   Usa uno de estos si encaja:
   **A2** — Present simple · Present continuous · Past simple · Past continuous ·
