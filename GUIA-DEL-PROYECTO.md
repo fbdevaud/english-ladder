@@ -1,8 +1,8 @@
 # English Ladder — guía del proyecto
 
-Objetivo doble: **mantener A1→A2 consolidado** y **avanzar A2→B1**.
-Contexto: aprendizaje presencial en Irlanda, con guías y tests de la escuela.
-Prioridades acordadas: **gramática B1** y **vocabulario / phrasal verbs**.
+Objetivo vigente (desde nov 2026): **avanzar hacia B2** con el material de clase, manteniendo
+A2 y B1 como repaso. Contexto: aprendizaje presencial en Irlanda, con guías y tests de la escuela.
+Prioridades acordadas: **gramática** y **vocabulario / phrasal verbs / collocations**.
 
 ---
 
@@ -14,15 +14,17 @@ Prioridades acordadas: **gramática B1** y **vocabulario / phrasal verbs**.
 | `content-a2.js` | Banco A2 (24 ítems) | Al ampliar A2 |
 | `content-b1-grammar.js` | Banco B1 gramática (54 ítems) | Sí |
 | `content-b1-vocab.js` | Banco B1 phrasal verbs, collocations, word formation, falsos amigos (38 ítems) | Sí |
-| `content-clase.js` | **Ejercicios sacados de tus guías y tests reales.** Empieza vacío. | Cada semana |
+| `content-clase.js` | **Ejercicios sacados de tus guías y tests reales.** También define el syllabus B2. | Cada semana |
 | `glossary.js` | **Glosario EN→ES** para tocar palabras del enunciado. Palabra en minúscula → traducción breve. | Al agregar ítems con palabras nuevas |
 | `validar.js` | Comprueba que el contenido nuevo no rompe nada (`node validar.js`) | Nunca |
 | `build-bundle.js` | Genera `english-ladder.bundle.html`, la app en un solo archivo | Nunca |
 | `PROMPT-NUEVO-CHAT.md` | El prompt listo para pegar al mandar fotos de un test | Nunca |
 | `.claude/commands/clase.md` | El comando `/clase` de Claude Code | Nunca |
+| `.github/workflows/validar.yml` | Corre `node validar.js` en cada push y PR a `main` | Nunca |
+| `.github/workflows/publicar.yml` | Lleva a `main` las ramas `claude/*` o `clase/*` que sólo tocan `content-clase.js` / `glossary.js` y validan OK | Nunca |
 | `tense-sprint_v5.html` | La primera versión (A1→A2). Se conserva como respaldo. | Nunca |
 
-Abrir la app: doble clic en **`index.html`**. Los cuatro archivos de contenido deben estar en la misma carpeta.
+Abrir la app: doble clic en **`index.html`**. Los cuatro archivos de contenido y `glossary.js` deben estar en la misma carpeta.
 
 ---
 
@@ -111,7 +113,7 @@ Desde esta carpeta:
 node validar.js
 ```
 
-Comprueba: sintaxis de los cuatro archivos, ids únicos, campos obligatorios, que cada respuesta aceptada se evalúe como correcta, que ninguna distractora se cuele, que los `gap` tengan `___`, que los `topic` existan en el syllabus, y que las sesiones se construyan sin romperse. Debe terminar en `OK: sin problemas`.
+Comprueba: sintaxis de los cuatro archivos de contenido y del glosario, que toda palabra tenga traducción, ids únicos, campos obligatorios, que cada respuesta aceptada se evalúe como correcta, que ninguna distractora se cuele, que los `gap` tengan `___`, que los `topic` existan en el syllabus, y que las sesiones se construyan sin romperse. Debe terminar en `OK: sin problemas`.
 
 ---
 
@@ -130,6 +132,9 @@ puede editar los archivos por ti.
    hace commit y push a `main`. Si la sesión no puede pushear a `main`, sube su rama
    `claude/...` y la Action `publicar` la lleva a `main` sola, pero sólo si toca únicamente
    archivos de contenido y el validador da OK. Si algo falla, no publica nada.
+   Un cambio de motor (nivel nuevo, `index.html`, `validar.js`) **nunca** se publica solo:
+   queda en su rama hasta que lo integres en el PC. `/clase` debe decírtelo explícitamente.
+   (Así se quedó varado el B2 en noviembre, en la rama `clase/file-test-7`.)
 4. GitHub Pages actualiza la app en 1–2 minutos. En GitHub → *Actions*, `validar` o
    `publicar` debe quedar en verde; si sale en rojo, ese cambio no se publicó o rompió algo.
 
@@ -147,7 +152,7 @@ Te devolverá un bloque de código que pegas tú en `content-clase.js`.
 Versión corta para pegar junto con tu reporte:
 
 > Trabajo con mi app English Ladder en `C:\Users\pipe_\OneDrive\Documentos\IA\English`.
-> Lee primero `GUIA-DEL-PROYECTO.md`. Objetivo: A2 → B1, manteniendo A2.
+> Lee primero `GUIA-DEL-PROYECTO.md`. Objetivo: hacia B2, manteniendo A2 y B1 como repaso.
 > Aquí va mi reporte actual desde la app:
 >
 > ```
@@ -231,6 +236,8 @@ nube sin exponerlo, la vía es un repositorio *privado* aparte sólo para `progr
 ## 9. Criterio de avance
 
 La app llama **solidez** al porcentaje de temas del nivel respondidos al 75% o más, con un mínimo de 3 intentos. Es orientativo, no un certificado.
+
+Aplica igual al nivel activo (hoy B2) respecto del anterior:
 
 - **Solidez B1 < 40%** — la base A2 todavía manda. Alterna días A2 / B1.
 - **40–70%** — fase de construcción. Prioriza los temas rojos con `Drill one topic`.
