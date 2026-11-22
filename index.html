@@ -25,6 +25,11 @@ body{margin:0;background:linear-gradient(155deg,#edf5ff,#f7f9fc 55%,#e9f7f2);fon
 .situation{font-size:1.05rem;line-height:1.5;margin:14px 0 9px;color:var(--muted)}
 .hint{display:inline-block;color:#725500;background:#fff6d8;border-radius:9px;padding:6px 10px;font-size:.85rem}
 .task{font-weight:750;font-size:1.1rem;line-height:1.45;margin:16px 0 12px}
+.task .w{cursor:pointer;border-bottom:1.5px dotted #9fb3cc;-webkit-tap-highlight-color:transparent}
+.task .w.on{background:#e3edff;border-radius:4px;border-bottom-color:var(--blue)}
+.gloss{position:absolute;z-index:50;max-width:min(280px,calc(100vw - 32px));background:#16233a;color:#fff;border-radius:12px;padding:9px 12px;font-size:.9rem;line-height:1.35;box-shadow:0 8px 24px #0004;pointer-events:none}
+.gloss b{display:block;font-size:.78rem;color:#9cc2ff;font-weight:700;margin-bottom:2px}
+.gloss:after{content:"";position:absolute;left:var(--ax,20px);bottom:-6px;border:6px solid transparent;border-bottom:0;border-top-color:#16233a}
 input,textarea{width:100%;border:2px solid #cdd9e8;border-radius:13px;font:inherit;padding:14px;outline:none;transition:.2s;background:#fff;color:var(--ink)}
 input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px #2563eb1a}
 input:disabled{opacity:1;-webkit-text-fill-color:var(--ink);color:var(--ink)}
@@ -112,6 +117,7 @@ textarea{min-height:170px;resize:vertical}
 <script src="content-b1-grammar.js"></script>
 <script src="content-b1-vocab.js"></script>
 <script src="content-clase.js"></script>
+<script src="glossary.js"></script>
 <script>
 /* ============================================================
    MOTOR - no contiene ejercicios. El contenido vive en content-*.js
@@ -459,6 +465,7 @@ function checkSet(L){
 }
 
 function render(){
+  hideGloss();
   const x = q[i];
   $('bar').style.width = (i/q.length*100) + '%';
   if(mode !== 'exam') $('topInfo').textContent = `${i+1} / ${q.length}`;
@@ -478,9 +485,65 @@ function render(){
     </div>
     <div id="feedback" class="feedback hide"></div></div>
     <div class="tiny">${x.type==='gap'?'Write only what goes in the gap.':x.type==='choice'?'Tap the option, then confirm.':'Full sentence. Punctuation is not graded.'}</div>`;
+  if(!silent) makeTappable(x);
   const inp = $('answer');
   if(inp){ inp.addEventListener('keydown', e => { if(e.key === 'Enter') check() }); inp.focus() }
 }
+/* glosario: palabras del enunciado tocables (no en exam/check) */
+const WORD_RE = /[A-Za-z]+(?:['’][A-Za-z]+)*/g;
+function glossLookup(x, w){
+  w = w.toLowerCase().replace(/’/g, "'");
+  const g = x.g || {};
+  const key = Object.keys(g).find(k => k.toLowerCase().split(/\s+/).includes(w));
+  if(key) return {head: key, text: g[key]};
+  const G = window.GLOSSARY || {};
+  if(G[w]) return {head: w, text: G[w]};
+  return null;
+}
+function makeTappable(x){
+  const task = document.querySelector('.task');
+  if(!task) return;
+  const walker = document.createTreeWalker(task, NodeFilter.SHOW_TEXT);
+  const nodes = []; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(n => {
+    const s = n.nodeValue; if(!WORD_RE.test(s)) return; WORD_RE.lastIndex = 0;
+    const frag = document.createDocumentFragment(); let last = 0, m;
+    while((m = WORD_RE.exec(s))){
+      if(m.index > last) frag.appendChild(document.createTextNode(s.slice(last, m.index)));
+      const sp = document.createElement('span'); sp.className = 'w'; sp.textContent = m[0];
+      frag.appendChild(sp); last = m.index + m[0].length;
+    }
+    if(last < s.length) frag.appendChild(document.createTextNode(s.slice(last)));
+    n.parentNode.replaceChild(frag, n);
+  });
+  task.addEventListener('click', e => {
+    const sp = e.target.closest('.w'); if(!sp) return;
+    e.stopPropagation();
+    if(sp.classList.contains('on')) return hideGloss();
+    showGloss(sp, glossLookup(x, sp.textContent));
+  });
+}
+function hideGloss(){
+  document.querySelectorAll('.gloss').forEach(b => b.remove());
+  document.querySelectorAll('.task .w.on').forEach(s => s.classList.remove('on'));
+}
+function showGloss(sp, hit){
+  hideGloss(); sp.classList.add('on');
+  const b = document.createElement('div'); b.className = 'gloss';
+  b.innerHTML = hit ? (hit.head.includes(' ') ? '<b>' + esc(hit.head) + '</b>' : '') + esc(hit.text) : '<i>Sin traducción</i>';
+  document.body.appendChild(b);
+  /* encima de la palabra: así nunca tapa el input ni las opciones */
+  const r = sp.getBoundingClientRect(), bw = b.offsetWidth, vw = document.documentElement.clientWidth;
+  let left = r.left + r.width/2 - bw/2; left = Math.max(16, Math.min(left, vw - 16 - bw));
+  let top = r.top - b.offsetHeight - 8; if(top < 4) top = r.bottom + 8;
+  b.style.left = (left + scrollX) + 'px'; b.style.top = (top + scrollY) + 'px';
+  b.style.setProperty('--ax', Math.max(10, Math.min(bw - 22, r.left + r.width/2 - left - 6)) + 'px');
+  if(top > r.top) b.style.setProperty('--ax', '-999px');
+}
+/* pointerdown: en iOS el click no burbujea desde zonas no clicables */
+document.addEventListener('pointerdown', e => { if(!e.target.closest('.task .w')) hideGloss(); });
+addEventListener('resize', hideGloss);
+
 function pick(k){
   picked = k;
   document.querySelectorAll('.opt').forEach((el,n) => el.classList.toggle('pick', n === k));

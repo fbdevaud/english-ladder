@@ -19,14 +19,15 @@ const store = {};
 const sandbox = {
   console,
   localStorage:{getItem:k=>k in store?store[k]:null, setItem:(k,v)=>{store[k]=String(v)}, removeItem:k=>{delete store[k]}},
-  document:{getElementById:()=>stubEl(), querySelectorAll:()=>[], querySelector:()=>stubEl()},
+  document:{getElementById:()=>stubEl(), querySelectorAll:()=>[], querySelector:()=>stubEl(), addEventListener(){}},
+  addEventListener(){},
   alert:()=>{}, confirm:()=>false, navigator:{}, setInterval:()=>0, clearInterval:()=>{},
   Date, Math, JSON, RegExp, Object, Array, String, Number, Set, Error, Proxy, isNaN, parseInt
 };
 sandbox.window = sandbox;
 vm.createContext(sandbox);
 
-for(const f of ['content-a2.js','content-b1-grammar.js','content-b1-vocab.js','content-clase.js']){
+for(const f of ['content-a2.js','content-b1-grammar.js','content-b1-vocab.js','content-clase.js','glossary.js']){
   try { vm.runInContext(fs.readFileSync(path.join(DIR,f),'utf8'), sandbox, {filename:f}); }
   catch(e){ console.log('SYNTAX FAIL ' + f + ': ' + e.message); process.exit(1); }
 }
@@ -122,5 +123,16 @@ BANK.slice(0,15).forEach(x => { sandbox.schedule(x.id,'right'); sandbox.bumpTopi
 BANK.slice(15,25).forEach(x => { sandbox.schedule(x.id,'wrong'); sandbox.bumpTopic(x,false); });
 try { const rep = vm.runInContext('buildReport()', sandbox); if(rep.length < 100) bad('buildReport demasiado corto'); }
 catch(e){ bad('buildReport lanza: ' + e.message); }
+
+// 9. glosario: toda palabra de t/options tiene traduccion (GLOSSARY o campo g del item)
+const G = sandbox.GLOSSARY || {};
+if(!Object.keys(G).length) bad('glossary.js no define window.GLOSSARY');
+const toks = s => String(s).replace(/<[^>]*>/g,' ').replace(/&[a-z]+;/g,' ').replace(/’/g,"'").toLowerCase().match(/[a-z]+(?:'[a-z]+)*/g) || [];
+BANK.forEach(x => {
+  if(x.g !== undefined && (typeof x.g !== 'object' || Array.isArray(x.g))) return bad(x.id + ' campo g debe ser un objeto {expresion: traduccion}');
+  const gw = new Set(Object.keys(x.g || {}).flatMap(k => k.toLowerCase().split(/s+/)));
+  const miss = [...new Set([x.t, ...(x.options || [])].flatMap(toks))].filter(w => !G[w] && !gw.has(w));
+  if(miss.length) bad(x.id + ' palabras sin glosario: ' + miss.join(', '));
+});
 
 console.log(fails ? '\n' + fails + ' PROBLEMAS' : '\nOK: sin problemas');

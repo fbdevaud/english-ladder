@@ -15,6 +15,7 @@ Prioridades acordadas: **gramática B1** y **vocabulario / phrasal verbs**.
 | `content-b1-grammar.js` | Banco B1 gramática (54 ítems) | Sí |
 | `content-b1-vocab.js` | Banco B1 phrasal verbs, collocations, word formation, falsos amigos (38 ítems) | Sí |
 | `content-clase.js` | **Ejercicios sacados de tus guías y tests reales.** Empieza vacío. | Cada semana |
+| `glossary.js` | **Glosario EN→ES** para tocar palabras del enunciado. Palabra en minúscula → traducción breve. | Al agregar ítems con palabras nuevas |
 | `validar.js` | Comprueba que el contenido nuevo no rompe nada (`node validar.js`) | Nunca |
 | `build-bundle.js` | Genera `english-ladder.bundle.html`, la app en un solo archivo | Nunca |
 | `PROMPT-NUEVO-CHAT.md` | El prompt listo para pegar al mandar fotos de un test | Nunca |
@@ -71,6 +72,7 @@ Todo ejercicio es un objeto con esta forma. **Los campos sin marcar son obligato
  options: ['a','b','c'],           // SÓLO si type es 'choice'
  r:     "With <b>since</b> use the present perfect.",  // la regla, en inglés
  es:    "'La conozco desde 2020' obliga a present perfect.", // (opcional) nota contrastiva ES→EN
+ g:     {'set off':'salir (de viaje)'}, // (opcional) expresiones de varias palabras → ES
  src:   'Clase 28 ago - unit 4'    // (opcional) de dónde salió
 }
 ```
@@ -84,6 +86,8 @@ Todo ejercicio es un objeto con esta forma. **Los campos sin marcar son obligato
 | `gap` | **Sólo** lo que falta | `t` debe contener `___` |
 | `choice` | Elige una opción | `options` obligatorio; `a[0]` debe estar en `options` |
 
+**Glosario al tocar palabras.** En práctica (no en Exam mode ni en Level check), cada palabra de `t` se puede tocar y muestra su traducción. Se busca primero en `g` del ítem: si la palabra forma parte de una de sus claves, la burbuja muestra la expresión completa y su traducción. Si no, se usa `glossary.js`.
+
 ---
 
 ## 5. Reglas para escribir el campo `a`
@@ -94,6 +98,8 @@ Todo ejercicio es un objeto con esta forma. **Los campos sin marcar son obligato
 4. **Sí lista variantes reales**: `who` / `that`, `set off` / `set out`, con y sin `that` en reported speech.
 5. **En `choice`, las distractoras deben ser inequívocamente incorrectas.** El validador las prueba una por una y falla si alguna se acepta.
 6. **La regla `r` va en inglés** (inmersión). El campo `es` es sólo para el contraste con el español cuando el error nace de traducir literalmente. Úsalo con criterio, no en todos los ítems.
+7. **Glosario obligatorio.** Toda palabra de `t` y `options` debe estar en `glossary.js` (en minúscula, tal como aparece: `went`, `can't`) o ser parte de una clave de `g`. El validador falla si falta alguna.
+8. **`g` nunca debe delatar la respuesta.** Úsalo para phrasal verbs o collocations que ya están completos en el enunciado (`last minute`, `line went dead`), no para el phrasal verb que el alumno debe completar en un `gap`.
 
 ---
 

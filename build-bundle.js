@@ -12,7 +12,7 @@ const fs = require('fs');
 const path = require('path');
 
 const DIR = __dirname;
-const FILES = ['content-a2.js','content-b1-grammar.js','content-b1-vocab.js','content-clase.js'];
+const FILES = ['content-a2.js','content-b1-grammar.js','content-b1-vocab.js','content-clase.js','glossary.js'];
 
 let html = fs.readFileSync(path.join(DIR,'index.html'),'utf8');
 let missing = [];
