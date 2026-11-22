@@ -71,6 +71,12 @@ pushear su rama `claude/...`), el segundo `git push` sube la rama actual. La Act
 Nunca uses `--force`. Di siempre en qué terminó: "publicado en main" o "subido a la rama
 X, esperando la Action publicar". Pages actualiza la app en uno o dos minutos.
 
+Si tienes que crear una rama, su nombre empieza con `claude/` o `clase/` (por ejemplo
+`claude/clase-2026-11-05`): la Action `publicar` sólo mira esas dos. Si la clase pide algo
+que no es contenido (un nivel nuevo, cambios en `index.html` o `validar.js`), **no lo mezcles
+con los ejercicios**: publica primero el contenido y dile al usuario, con todas sus letras,
+que el cambio de motor queda en la rama X **sin publicar** hasta que lo integre.
+
 **6. Cierra con lo accionable.**
 Dile cuántos ítems agregaste, a qué temas, y **cuál es el único hueco que más le conviene
 atacar esta semana**. Una prioridad, no una lista de ocho.

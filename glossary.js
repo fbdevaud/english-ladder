@@ -77,5 +77,21 @@ way:'camino; manera', we:'nosotros', wedding:'boda, matrimonio', week:'semana', 
 went:'fue', were:'eran, estaban, fueron', what:'qué', when:'cuándo, cuando', where:'dónde', which:'cuál; que', whole:'entero',
 will:'(futuro); voluntad', winter:'invierno', with:'con', without:'sin', woke:'despertó', word:'palabra', work:'trabajar; trabajo',
 working:'trabajando', works:'trabaja; funciona', would:'(condicional) -ría', write:'escribir', year:'año', years:'años',
-yesterday:'ayer', you:'tú, usted', "you're":'tú eres/estás', "you've":'tú has', young:'joven', your:'tu, su'
+yesterday:'ayer', you:'tú, usted', "you're":'tú eres/estás', "you've":'tú has', young:'joven', your:'tu, su',
+/* File Test 7 (B2, 5-6 nov) */
+all:'todo(s), toda(s)', as:'como; mientras', avoid:'evitar', away:'lejos, (irse) de allí', bank:'banco', cent:'centavo; (per cent) por ciento',
+chocolate:'chocolate', cloud:'nube', companies:'empresas', company:'empresa', cooking:'cocinar; cocina', "couldn't":'no pudo, no podía',
+dad:'papá', dish:'plato', dumping:'botar, verter', elevated:'elevado', enjoying:'disfrutar, disfrutando', eric:'Eric (nombre)', exam:'examen',
+eyebrows:'cejas', feel:'sentir(se)', finger:'dedo', freezing:'helado, congelándose', ghost:'fantasma', great:'genial, gran',
+"he'd":'él habría / él preferiría (he would, he had)', honest:'honesto, sincero', its:'su (de una cosa)', just:'solo, simplemente; recién',
+law:'ley', leave:'dejar; irse', "let's":'vamos a… (let us)', library:'biblioteca', looks:'se ve, parece; mira', main:'principal',
+men:'hombres', nephew:'sobrino', nothing:'nada', order:'pedir; orden', outside:'afuera, fuera de', parking:'estacionamiento',
+paying:'pagar, pagando', per:'por (cada)', pizza:'pizza', prevent:'impedir, prevenir', price:'precio', prices:'precios',
+pushed:'empujó', rabbit:'conejo', raised:'levantó, subió (algo)', rather:'más bien; (would rather) preferir', refuse:'negarse, rechazar',
+rise:'subir, aumentar', rised:'(forma incorrecta, no existe)', risen:'subido, aumentado (participio de rise)', river:'río',
+robbed:'robó, asaltó', rose:'subió, aumentó (pasado de rise)', sat:'se sentó', says:'dice', shook:'sacudió; (shook hands) se dieron la mano',
+shout:'gritar', shouted:'gritó', showed:'mostró', shrugged:'encogió (los hombros)', something:'algo', sound:'sonar; sonido',
+sounds:'suena', staff:'personal, empleados', still:'todavía; aún así', sweet:'dulce', thief:'ladrón', though:'aunque; (as though) como si',
+thumb:'pulgar', unemployment:'desempleo', us:'nos, nosotros', voice:'voz', waiter:'garzón, mesero', walked:'caminó, se fue caminando',
+wallet:'billetera', waste:'residuos, desechos; desperdiciar', window:'ventana', wrong:'equivocado, incorrecto'
 });

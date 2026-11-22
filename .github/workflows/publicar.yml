@@ -1,11 +1,11 @@
-# Lleva a main los pushes a ramas claude/* que SOLO tocan contenido de clase,
+# Lleva a main los pushes a ramas claude/* o clase/* que SOLO tocan contenido de clase,
 # con el validador en OK y sin conflictos. Cualquier otra cosa falla en rojo
 # y no toca main.
 name: publicar
 
 on:
   push:
-    branches: ['claude/**']
+    branches: ['claude/**', 'clase/**']
 
 permissions:
   contents: write
