@@ -130,7 +130,7 @@ if(!Object.keys(G).length) bad('glossary.js no define window.GLOSSARY');
 const toks = s => String(s).replace(/<[^>]*>/g,' ').replace(/&[a-z]+;/g,' ').replace(/’/g,"'").toLowerCase().match(/[a-z]+(?:'[a-z]+)*/g) || [];
 BANK.forEach(x => {
   if(x.g !== undefined && (typeof x.g !== 'object' || Array.isArray(x.g))) return bad(x.id + ' campo g debe ser un objeto {expresion: traduccion}');
-  const gw = new Set(Object.keys(x.g || {}).flatMap(k => k.toLowerCase().split(/s+/)));
+  const gw = new Set(Object.keys(x.g || {}).flatMap(k => k.toLowerCase().split(/\s+/)));
   const miss = [...new Set([x.t, ...(x.options || [])].flatMap(toks))].filter(w => !G[w] && !gw.has(w));
   if(miss.length) bad(x.id + ' palabras sin glosario: ' + miss.join(', '));
 });
